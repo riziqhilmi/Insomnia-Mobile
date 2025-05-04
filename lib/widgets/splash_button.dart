@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../screens/login_screen.dart'; // Pastikan path-nya sesuai dengan struktur foldermu
 
 class SplashNextButton extends StatelessWidget {
   const SplashNextButton({super.key});
@@ -18,7 +19,10 @@ class SplashNextButton extends StatelessWidget {
             ),
           ),
           onPressed: () {
-            // TODO: Navigasi ke halaman berikutnya
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginScreen()),
+            );
           },
           child: const Text(
             'Mulai',
