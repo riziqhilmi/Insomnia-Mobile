@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import 'register_screen.dart';
-
+import '../page/home_page.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -74,7 +74,12 @@ class LoginScreen extends StatelessWidget {
                 const SizedBox(height: 20),
                 CustomButton(
                   text: "Masuk",
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => HomePage()),
+                    );
+                  },
                 ),
                 const SizedBox(height: 30),
                 Row(
