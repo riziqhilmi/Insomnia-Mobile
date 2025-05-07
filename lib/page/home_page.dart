@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../page/profile_page.dart';
 
 class HomePage extends StatelessWidget {
   @override
@@ -115,6 +116,15 @@ class HomePage extends StatelessWidget {
         selectedItemColor: Colors.deepPurple[800],
         unselectedItemColor: Colors.grey,
         backgroundColor: const Color(0xFF1B263B),
+        onTap: (index) {
+          if (index == 2) {
+            // Navigasi ke halaman profil
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ProfilePage()),
+            );
+          }
+        },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
           BottomNavigationBarItem(
