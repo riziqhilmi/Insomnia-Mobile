@@ -3,6 +3,7 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import 'register_screen.dart';
 import '../page/home_page.dart';
+import 'forgot_password.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -61,16 +62,18 @@ class LoginScreen extends StatelessWidget {
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: TextButton(
-                    onPressed: () {},
-                    child: const Text(
-                      "Lupa Password?",
-                      style: TextStyle(color: Colors.grey),
-                    ),
-                  ),
-                ),
+                          TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) =>ForgotPasswordScreen ()),
+                );
+              },
+              child: const Text(
+                "Lupa Password?",
+                style: TextStyle(color: Colors.grey),
+              ),
+            ),
                 const SizedBox(height: 20),
                 CustomButton(
                   text: "Masuk",

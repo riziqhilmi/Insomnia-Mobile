@@ -68,7 +68,7 @@ class SplashCatAndMoon extends StatelessWidget {
         alignment: Alignment.center,
         children: [
           Positioned(
-            top: 420,
+            top: 600,
             child: Transform.scale(
               scale: 1.5,
               child: Image.asset(
@@ -78,10 +78,10 @@ class SplashCatAndMoon extends StatelessWidget {
             ),
           ),
           const Positioned(
-            bottom: 220,
+            bottom: 300,
             child: Image(
               image: AssetImage('assets/images/images/sleep_cat.png'),
-              width: 200,
+              width: 250,
             ),
           ),
         ],
