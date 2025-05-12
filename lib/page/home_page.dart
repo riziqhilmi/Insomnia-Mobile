@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import '../page/profile_page.dart';
 
 class HomePage extends StatelessWidget {
+  const HomePage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,7 +142,7 @@ class FeatureButton extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  const FeatureButton({required this.icon, required this.label});
+  const FeatureButton({super.key, required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
@@ -167,7 +169,7 @@ class FeatureButton extends StatelessWidget {
 class SleepButton extends StatelessWidget {
   final String text;
 
-  const SleepButton({required this.text});
+  const SleepButton({super.key, required this.text});
 
   @override
   Widget build(BuildContext context) {

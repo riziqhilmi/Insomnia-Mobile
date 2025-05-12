@@ -3,7 +3,7 @@ import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 
 class EditProfileScreen extends StatelessWidget {
-  EditProfileScreen({Key? key}) : super(key: key);
+  EditProfileScreen({super.key});
 
   final TextEditingController namaController = TextEditingController();
   final TextEditingController umurController = TextEditingController();
