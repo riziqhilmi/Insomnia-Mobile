@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart'; // Import GetX
 import 'screens/splash_screens.dart';
 
 void main() {
@@ -10,7 +11,7 @@ class IsomnicApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp( // Ganti MaterialApp dengan GetMaterialApp
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
     );

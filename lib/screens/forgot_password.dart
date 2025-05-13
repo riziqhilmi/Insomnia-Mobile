@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-import '../widgets/custom_button.dart'; 
+import '../widgets/custom_button.dart';
 import 'otp_verification_screen.dart';
-
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -10,7 +9,8 @@ class ForgotPasswordScreen extends StatefulWidget {
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with SingleTickerProviderStateMixin {
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
+    with SingleTickerProviderStateMixin {
   final TextEditingController _emailController = TextEditingController();
   String? _emailError;
 
@@ -26,7 +26,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
       duration: const Duration(milliseconds: 300),
       vsync: this,
     );
-    
+
     // Create a shake animation
     _errorAnimation = Tween<Offset>(
       begin: const Offset(0.0, 0.0),
@@ -41,7 +41,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
         _errorAnimationController.reverse();
       }
     });
-    
+
     // Listen for changes in the text field
     _emailController.addListener(_onEmailChanged);
   }
@@ -62,7 +62,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
 
   bool _validateEmail({bool showError = true}) {
     final email = _emailController.text.trim();
-    
+
     if (email.isEmpty) {
       if (showError) {
         setState(() {
@@ -103,7 +103,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
-    
+
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
@@ -165,7 +165,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
                     ),
                   ),
                   const SizedBox(height: 50),
-                  
+
                   // Email field with error message
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -193,30 +193,31 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
                         ),
                     ],
                   ),
-                  
+
                   const SizedBox(height: 40),
-                             CustomButton(
-  text: 'Kirim',
-  onPressed: () {
-    if (_validateEmail()) {
-      // Jika email valid, navigasi ke OtpVerificationScreen dengan email
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => OtpVerificationScreen(email: _emailController.text),
-        ),
-      );
-    } else {
-      // Tampilkan animasi kesalahan jika email tidak valid
-      _errorAnimationController.forward(from: 0.0);
-    }
-  },
-  gradient: const LinearGradient(
-    colors: [Color(0xFF6E8EF7), Color(0xFF4B6DE9)],
-    begin: Alignment.centerLeft,
-    end: Alignment.centerRight,
-  ),
-),
+                  CustomButton(
+                    text: 'Kirim',
+                    onPressed: () {
+                      if (_validateEmail()) {
+                        // Jika email valid, navigasi ke OtpVerificationScreen dengan email
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => OtpVerificationScreen(
+                                email: _emailController.text),
+                          ),
+                        );
+                      } else {
+                        // Tampilkan animasi kesalahan jika email tidak valid
+                        _errorAnimationController.forward(from: 0.0);
+                      }
+                    },
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF6E8EF7), Color(0xFF4B6DE9)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                  ),
                   const SizedBox(height: 20),
                 ],
               ),
@@ -249,7 +250,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> with Single
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
             ),
-            contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+            contentPadding:
+                const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
           ),
           onChanged: (value) {
             // Optional: you can add specific validation logic here if needed
@@ -338,30 +340,26 @@ class MoonPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final moonColor = Colors.white.withOpacity(0.95);
-    
+
     // Draw the moon shape
     final path = Path();
     path.addOval(Rect.fromLTWH(0, 0, size.width, size.height));
-    
+
     final shadowPath = Path();
-    shadowPath.addOval(Rect.fromLTWH(
-      size.width * 0.25, 
-      size.height * -0.05, 
-      size.width * 0.9, 
-      size.height * 0.9
-    ));
-    
+    shadowPath.addOval(Rect.fromLTWH(size.width * 0.25, size.height * -0.05,
+        size.width * 0.9, size.height * 0.9));
+
     // Use difference to create crescent moon shape
     final moonPath = Path.combine(
       PathOperation.difference,
       path,
       shadowPath,
     );
-    
+
     final paint = Paint()
       ..color = moonColor
       ..style = PaintingStyle.fill;
-    
+
     canvas.drawPath(moonPath, paint);
   }
 

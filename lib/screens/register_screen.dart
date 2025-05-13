@@ -14,12 +14,31 @@ class _RegisterScreenState extends State<RegisterScreen>
   final _formKey = GlobalKey<FormState>();
 
   final _nameController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _birthDateController = TextEditingController();
+  final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
 
   bool _isPasswordVisible = false;
   bool _isConfirmVisible = false;
+  String? _gender; // Untuk menyimpan pilihan jenis kelamin
+
+  // Fungsi untuk membuka date picker
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+    if (picked != null) {
+      setState(() {
+        _birthDateController.text = "${picked.day}/${picked.month}/${picked.year}";
+      });
+    }
+  }
 
   void _handleRegister() {
     if (_formKey.currentState!.validate()) {
@@ -34,6 +53,18 @@ class _RegisterScreenState extends State<RegisterScreen>
         ),
       );
     }
+  }
+
+  @override
+  void dispose() {
+    _nameController.dispose();
+    _usernameController.dispose();
+    _birthDateController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -114,6 +145,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 color: Colors.white)),
                         const SizedBox(height: 36),
 
+                        // Nama Lengkap
                         _buildInput(
                           controller: _nameController,
                           icon: Icons.person_outline,
@@ -122,6 +154,54 @@ class _RegisterScreenState extends State<RegisterScreen>
                         ),
                         const SizedBox(height: 20),
 
+                        // Username
+                        _buildInput(
+                          controller: _usernameController,
+                          icon: Icons.person_outline,
+                          hint: "Username",
+                          validator: (val) => val!.isEmpty ? 'Username tidak boleh kosong' : null,
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Jenis Kelamin (Dropdown)
+                        _buildInput(
+                          controller: null, // Tidak perlu controller untuk dropdown
+                          icon: Icons.person_outline,
+                          hint: "Jenis Kelamin",
+                          validator: (val) => _gender == null ? 'Jenis kelamin harus dipilih' : null,
+                          dropdownItems: [
+                            const DropdownMenuItem(
+                              value: "Laki-laki",
+                              child: Text("Laki-laki"),
+                            ),
+                            const DropdownMenuItem(
+                              value: "Perempuan",
+                              child: Text("Perempuan"),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Tanggal Lahir (Date Picker)
+                        _buildInput(
+                          controller: _birthDateController,
+                          icon: Icons.calendar_today,
+                          hint: "Tanggal Lahir",
+                          validator: (val) => val!.isEmpty ? 'Tanggal lahir tidak boleh kosong' : null,
+                          isDatePicker: true,
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Nomor Telepon (Keyboard Numerik)
+                        _buildInput(
+                          controller: _phoneController,
+                          icon: Icons.phone,
+                          hint: "Nomor telepon",
+                          validator: (val) => val!.isEmpty ? 'Nomor telepon tidak boleh kosong' : null,
+                        ),
+                        const SizedBox(height: 20),
+
+                        // Email
                         _buildInput(
                           controller: _emailController,
                           icon: Icons.email_outlined,
@@ -131,6 +211,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         ),
                         const SizedBox(height: 20),
 
+                        // Password
                         _buildInput(
                           controller: _passwordController,
                           icon: Icons.lock_outline,
@@ -143,6 +224,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                         ),
                         const SizedBox(height: 20),
 
+                        // Konfirmasi Password
                         _buildInput(
                           controller: _confirmPasswordController,
                           icon: Icons.lock_outline,
@@ -192,32 +274,86 @@ class _RegisterScreenState extends State<RegisterScreen>
   }
 
   Widget _buildInput({
-    required TextEditingController controller,
+    required TextEditingController? controller,
     required IconData icon,
     required String hint,
     bool obscure = false,
     Widget? suffix,
     String? Function(String?)? validator,
+    bool isDatePicker = false,
+    List<DropdownMenuItem<String>>? dropdownItems,
   }) {
-    return TextFormField(
-      controller: controller,
-      obscureText: obscure,
-      validator: validator,
-      style: const TextStyle(color: Colors.white),
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white10,
-        prefixIcon: Icon(icon, color: Colors.white70),
-        suffixIcon: suffix,
-        hintText: hint,
-        hintStyle: const TextStyle(color: Colors.white38),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide.none,
+    if (isDatePicker) {
+      return GestureDetector(
+        onTap: () => _selectDate(context),
+        child: AbsorbPointer(
+          child: TextFormField(
+            controller: controller,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: Colors.white10,
+              prefixIcon: Icon(icon, color: Colors.white70),
+              hintText: hint,
+              hintStyle: const TextStyle(color: Colors.white38),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: BorderSide.none,
+              ),
+              contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+            ),
+            style: const TextStyle(color: Colors.white),
+            validator: validator,
+            enabled: false,
+          ),
         ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-      ),
-    );
+      );
+    } else if (dropdownItems != null) {
+      return DropdownButtonFormField<String>(
+        value: _gender,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white10,
+          prefixIcon: Icon(icon, color: Colors.white70),
+          hintText: hint,
+          hintStyle: const TextStyle(color: Colors.white38),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+        ),
+        style: const TextStyle(color: Colors.white),
+        dropdownColor: const Color(0xFF0B0F2F), // Sesuai tema
+        items: dropdownItems,
+        onChanged: (String? newValue) {
+          setState(() {
+            _gender = newValue;
+          });
+        },
+        validator: validator,
+      );
+    } else {
+      return TextFormField(
+        controller: controller,
+        obscureText: obscure,
+        validator: validator,
+        style: const TextStyle(color: Colors.white),
+        keyboardType: hint == "Nomor telepon" ? TextInputType.number : TextInputType.text,
+        decoration: InputDecoration(
+          filled: true,
+          fillColor: Colors.white10,
+          prefixIcon: Icon(icon, color: Colors.white70),
+          suffixIcon: suffix,
+          hintText: hint,
+          hintStyle: const TextStyle(color: Colors.white38),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(14),
+            borderSide: BorderSide.none,
+          ),
+          contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+        ),
+      );
+    }
   }
 
   Widget _visibilityIcon(bool visible, VoidCallback onPressed) {

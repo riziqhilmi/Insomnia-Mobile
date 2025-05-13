@@ -78,7 +78,7 @@ class SplashCatAndMoon extends StatelessWidget {
             ),
           ),
           const Positioned(
-            bottom: 300,
+            bottom: 220,
             child: Image(
               image: AssetImage('assets/images/images/sleep_cat.png'),
               width: 250,

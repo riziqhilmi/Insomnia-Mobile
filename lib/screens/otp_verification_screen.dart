@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 import '../widgets/custom_button.dart';
+import '../screens/reset_password.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
-  
+
   const OtpVerificationScreen({
     super.key,
     required this.email,
@@ -16,25 +17,20 @@ class OtpVerificationScreen extends StatefulWidget {
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
-  final List<TextEditingController> _otpControllers = List.generate(
-    4, 
-    (index) => TextEditingController()
-  );
-  final List<FocusNode> _focusNodes = List.generate(
-    4, 
-    (index) => FocusNode()
-  );
-  
+  final List<TextEditingController> _otpControllers =
+      List.generate(4, (index) => TextEditingController());
+  final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
+
   Timer? _timer;
   int _remainingSeconds = 120; // 2 minutes
   String _formattedTime = "02:00";
-  
+
   @override
   void initState() {
     super.initState();
     startTimer();
   }
-  
+
   @override
   void dispose() {
     _timer?.cancel();
@@ -46,7 +42,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     }
     super.dispose();
   }
-  
+
   void startTimer() {
     _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       if (_remainingSeconds == 0) {
@@ -59,13 +55,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       }
     });
   }
-  
+
   String formatTime(int seconds) {
     int minutes = seconds ~/ 60;
     int remainingSeconds = seconds % 60;
     return "${minutes.toString().padLeft(2, '0')}:${remainingSeconds.toString().padLeft(2, '0')}";
   }
-  
+
   void resendOTP() {
     // Implement your resend OTP logic here
     setState(() {
@@ -73,7 +69,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       _formattedTime = "02:00";
     });
     startTimer();
-    
+
     // Show snackbar to confirm OTP was resent
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -82,11 +78,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       ),
     );
   }
-  
+
   void verifyOTP() {
     // Collect all digits
-    String completeOTP = _otpControllers.map((controller) => controller.text).join();
-    
+    String completeOTP =
+        _otpControllers.map((controller) => controller.text).join();
+
     // Check if OTP is complete
     if (completeOTP.length != 4) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -97,7 +94,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       );
       return;
     }
-    
+
     // Here you would call your verification API
     // For now, we'll just show a success message
     ScaffoldMessenger.of(context).showSnackBar(
@@ -106,11 +103,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         backgroundColor: Colors.green.shade700,
       ),
     );
-    
+
     // Navigate to the next screen after verification
     // Navigator.of(context).pushReplacement(...);
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -143,9 +140,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ],
                 ),
-                
+
                 SizedBox(height: 30),
-                
+
                 // Sleep themed illustration
                 Center(
                   child: Container(
@@ -201,9 +198,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 40),
-                
+
                 // Title
                 Center(
                   child: Text(
@@ -216,9 +213,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 12),
-                
+
                 // Instruction text
                 Center(
                   child: Text(
@@ -229,9 +226,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 4),
-                
+
                 // Email display
                 Center(
                   child: Text(
@@ -243,9 +240,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 50),
-                
+
                 // OTP input fields
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -254,9 +251,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     (index) => _buildOTPDigitField(index),
                   ),
                 ),
-                
+
                 SizedBox(height: 50),
-                
+
                 // Timer and resend option
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -278,9 +275,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ],
                 ),
-                
+
                 SizedBox(height: 16),
-                
+
                 // Resend button
                 Center(
                   child: TextButton(
@@ -290,30 +287,34 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
-                        color: _remainingSeconds > 0 
-                          ? Colors.grey 
-                          : Color(0xFF8E97FD),
+                        color: _remainingSeconds > 0
+                            ? Colors.grey
+                            : Color(0xFF8E97FD),
                       ),
                     ),
                   ),
                 ),
-                
+
                 SizedBox(height: 50),
-                
+
                 // Verify button
                 CustomButton(
                   text: 'Verifikasi',
-                  onPressed: verifyOTP,
-                  gradient: LinearGradient(
-                    colors: [
-                      Color(0xFF7583CA), 
-                      Color(0xFF8E97FD)
-                    ],
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const  ResetPasswordScreen (),
+                      ),
+                    );
+                  },
+                  gradient: const LinearGradient(
+                    colors: [Color(0xFF7583CA), Color(0xFF8E97FD)],
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                   ),
                 ),
-                
+
                 SizedBox(height: 30),
               ],
             ),
@@ -322,7 +323,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       ),
     );
   }
-  
+
   Widget _buildOTPDigitField(int index) {
     return Container(
       width: 70,
@@ -371,7 +372,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             } else {
               _focusNodes[index].unfocus();
               // Auto verify when all fields are filled
-              if (_otpControllers.every((controller) => controller.text.isNotEmpty)) {
+              if (_otpControllers
+                  .every((controller) => controller.text.isNotEmpty)) {
                 // Optional: auto verify
                 // verifyOTP();
               }
