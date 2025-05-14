@@ -9,9 +9,10 @@ class ProfilePage extends StatelessWidget {
   const ProfilePage({super.key});
 
   // Data sementara untuk debugging (ganti dengan data dinamis dari state management atau penyimpanan)
-  final String username = "darunganari";
+  final String username = "ari";
   final String phone = "081234567890";
   final String email = "darunganari@gmail.com";
+  final bool isImplemented = true;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +56,8 @@ class ProfilePage extends StatelessWidget {
                       Text(
                         '$username\n$email',
                         textAlign: TextAlign.center,
-                        style: const TextStyle(color: Colors.white, fontSize: 16),
+                        style:
+                            const TextStyle(color: Colors.white, fontSize: 16),
                       ),
                     ],
                   ),
@@ -81,11 +83,15 @@ class ProfilePage extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  _buildButton(context, 'Edit Profil Pengguna', Icons.edit, isEditProfile: true),
-                  _buildButton(context, 'Keamanan & privasi', Icons.lock, isSecurity: true),
-                  _buildButton(context, 'Peraturan notifikasi', Icons.notifications),
+                  _buildButton(context, 'Edit Profil Pengguna', Icons.edit,
+                      isEditProfile: true),
+                  _buildButton(context, 'Keamanan & privasi', Icons.lock,
+                      isSecurity: true),
+                  _buildButton(
+                      context, 'Peraturan notifikasi', Icons.notifications),
                   _buildButton(context, 'Tentang Aplikasi', Icons.info),
-                  _buildButton(context, 'Keluar Akun', Icons.logout, isLogout: true),
+                  _buildButton(context, 'Keluar Akun', Icons.logout,
+                      isLogout: true),
                 ],
               ),
             ),
@@ -106,36 +112,71 @@ class ProfilePage extends StatelessWidget {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
-          BottomNavigationBarItem(icon: Icon(Icons.analytics), label: 'Prediksi'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.analytics), label: 'Prediksi'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Saya'),
         ],
       ),
     );
   }
 
-  Widget _buildButton(BuildContext context, String title, IconData icon, {bool isLogout = false, bool isEditProfile = false, bool isSecurity = false}) {
+  Widget _buildButton(BuildContext context, String title, IconData icon,
+      {bool isLogout = false,
+      bool isEditProfile = false,
+      bool isSecurity = false}) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 12),
       child: ElevatedButton(
         onPressed: () {
-          if (isLogout) {
-            // Navigasi ke halaman LoginScreen dengan menghapus semua halaman sebelumnya
-            Get.offAll(() => const LoginScreen());
-          } else if (isEditProfile) {
-            // Navigasi ke EditProfileScreen
-            Get.to(() => const EditProfileScreen());
-          } else if (isSecurity) {
-            // Navigasi ke SecurityPrivacyScreen dengan parameter wajib
-            Get.to(() => SecurityPrivacyScreen(
-                  username: username,
-                  phone: _maskPhoneNumber(phone),
-                  email: _maskEmail(email),
-                ));
+          if (isImplemented) {
+            if (isEditProfile) {
+              // Navigasi ke EditProfileScreen
+              Get.to(() => const EditProfileScreen());
+            } else if (isSecurity) {
+              // Navigasi ke SecurityPrivacyScreen dengan parameter wajib
+              Get.to(() => SecurityPrivacyScreen(
+                    username: username,
+                    phone: _maskPhoneNumber(phone),
+                    email: _maskEmail(email),
+                  ));
+            } else {
+              Get.offAll(() => const LoginScreen());
+            }
           } else {
-            // Logika lainnya jika bukan tombol logout
-            Get.snackbar('Info', 'Fitur $title belum diimplementasikan');
+            Get.showSnackbar(GetSnackBar(
+              message: 'Fitur $title belum diimplementasikan',
+              duration: const Duration(seconds: 2),
+              backgroundColor: Colors.red,
+              snackPosition: SnackPosition.BOTTOM,
+            ));
           }
+
+          // if (isLogout) {
+          //   // Navigasi ke halaman LoginScreen dengan menghapus semua halaman sebelumnya
+          //   Get.offAll(() => const LoginScreen());
+          // }
+          // else if (isEditProfile) {
+          //   // Navigasi ke EditProfileScreen
+          //   Get.to(() => const EditProfileScreen());
+          // } else if (isSecurity) {
+          //   // Navigasi ke SecurityPrivacyScreen dengan parameter wajib
+          //   Get.to(() => SecurityPrivacyScreen(
+          //         username: username,
+          //         phone: _maskPhoneNumber(phone),
+          //         email: _maskEmail(email),
+          //       ));
+          // } else {
+          //   // Get.snackbar('Info', 'Fitur $title belum diimplementasikan');
+          //   Get.showSnackbar(GetSnackBar(
+          //     message: 'Fitur $title belum diimplementasikan',
+          //     duration: const Duration(seconds: 2),
+          //     backgroundColor: Colors.red,
+          //     snackPosition: SnackPosition.BOTTOM,
+          //   ));
+          //   // Logika lainnya jika bukan tombol logout
+
+          // }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.deepPurple[600],

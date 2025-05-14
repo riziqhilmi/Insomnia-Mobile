@@ -351,7 +351,7 @@ class FloatingStarsPainter extends CustomPainter {
 
     // Posisi dan opacity bintang berubah berdasarkan animasi
     for (int i = 0; i < 5; i++) {
-      final double angle = (2 * 3.14159 * i / 5) + (animationValue * 2 * 3.14159);
+      
       final double radius = 10 + (i % 2 == 0 ? 5 : 0);
       final double starX = size.width / 2 + radius * (i + 1) / 2 * 0.5 * (animationValue * 2 - 1);
       final double starY = size.height / 2 + radius * (i + 1) / 2 * (animationValue * 2 - 1);
