@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../page/profile_page.dart';
-
+import 'education_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -100,9 +100,20 @@ class HomePage extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: const [
+                    children:[
                       FeatureButton(icon: Icons.bar_chart, label: 'Statistik'),
-                      FeatureButton(icon: Icons.menu_book, label: 'Edukasi'),
+                      FeatureButton(
+                        icon: Icons.menu_book,
+                        label: 'Edukasi',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => EducationPage(),
+                            ),
+                          );
+                        },
+                      ),
                     ],
                   ),
                   const SizedBox(height: 30),
@@ -142,30 +153,40 @@ class HomePage extends StatelessWidget {
 class FeatureButton extends StatelessWidget {
   final IconData icon;
   final String label;
+  final VoidCallback? onTap;  // Menambahkan onTap sebagai parameter opsional
 
-  const FeatureButton({super.key, required this.icon, required this.label});
+  const FeatureButton({
+    super.key,
+    required this.icon,
+    required this.label,
+    this.onTap,  // Inisialisasi parameter onTap
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        CircleAvatar(
-          radius: 30,
-          backgroundColor: Colors.deepPurple[700],
-          child: Icon(icon, color: Colors.white, size: 28),
-        ),
-        const SizedBox(height: 8),
-        Text(
-          label,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
+    return GestureDetector(
+      onTap: onTap,  // Menggunakan onTap saat widget diklik
+      child: Column(
+        children: [
+          CircleAvatar(
+            radius: 30,
+            backgroundColor: Colors.deepPurple[700],
+            child: Icon(icon, color: Colors.white, size: 28),
           ),
-        ),
-      ],
+          const SizedBox(height: 8),
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontSize: 14,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+
 
 class SleepButton extends StatelessWidget {
   final String text;
