@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../page/profile_page.dart';
 import 'education_page.dart';
+import 'prediski_page.dart';
+import 'package:get/get.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -137,12 +139,17 @@ class HomePage extends StatelessWidget {
               context,
               MaterialPageRoute(builder: (context) => const ProfilePage()),
             );
+          } else if (index == 1) {
+            // Navigasi ke halaman prediksi
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SleepClassificationPage()),
+            );
           }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.analytics), label: 'Prediksi'),
+          BottomNavigationBarItem(icon: Icon(Icons.analytics), label: 'Prediksi'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Saya'),
         ],
       ),
