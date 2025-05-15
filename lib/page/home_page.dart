@@ -3,6 +3,7 @@ import '../page/profile_page.dart';
 import 'education_page.dart';
 import 'prediski_page.dart';
 import 'package:get/get.dart';
+import '../page/statistik_page.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -102,8 +103,19 @@ class HomePage extends StatelessWidget {
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children:[
-                      FeatureButton(icon: Icons.bar_chart, label: 'Statistik'),
+                    children: [
+                      FeatureButton(
+                        icon: Icons.bar_chart,
+                        label: 'Statistik',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => StatistikPage(),
+                            ),
+                          );
+                        },
+                      ),
                       FeatureButton(
                         icon: Icons.menu_book,
                         label: 'Edukasi',
@@ -143,13 +155,15 @@ class HomePage extends StatelessWidget {
             // Navigasi ke halaman prediksi
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SleepClassificationPage()),
+              MaterialPageRoute(
+                  builder: (context) => const SleepClassificationPage()),
             );
           }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
-          BottomNavigationBarItem(icon: Icon(Icons.analytics), label: 'Prediksi'),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.analytics), label: 'Prediksi'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Saya'),
         ],
       ),
@@ -160,19 +174,19 @@ class HomePage extends StatelessWidget {
 class FeatureButton extends StatelessWidget {
   final IconData icon;
   final String label;
-  final VoidCallback? onTap;  // Menambahkan onTap sebagai parameter opsional
+  final VoidCallback? onTap; // Menambahkan onTap sebagai parameter opsional
 
   const FeatureButton({
     super.key,
     required this.icon,
     required this.label,
-    this.onTap,  // Inisialisasi parameter onTap
+    this.onTap, // Inisialisasi parameter onTap
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,  // Menggunakan onTap saat widget diklik
+      onTap: onTap, // Menggunakan onTap saat widget diklik
       child: Column(
         children: [
           CircleAvatar(
@@ -193,7 +207,6 @@ class FeatureButton extends StatelessWidget {
     );
   }
 }
-
 
 class SleepButton extends StatelessWidget {
   final String text;
