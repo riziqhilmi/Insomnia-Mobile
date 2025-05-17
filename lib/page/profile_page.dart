@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // Import GetX
+import 'package:insomnia_app/page/language_page.dart';
 import '../screens/login_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../screens/security_privacy_screen.dart';
@@ -87,8 +88,9 @@ class ProfilePage extends StatelessWidget {
                       isEditProfile: true),
                   _buildButton(context, 'Keamanan & privasi', Icons.lock,
                       isSecurity: true),
-                  _buildButton(
-                      context, 'Peraturan notifikasi', Icons.notifications),
+                  _buildButton(context, 'Peraturan notifikasi', Icons.notifications),
+                  _buildButton(context, 'Bahasa', Icons.language,
+                      isLanguage: true),
                   _buildButton(context, 'Tentang Aplikasi', Icons.info),
                   _buildButton(context, 'Keluar Akun', Icons.logout,
                       isLogout: true),
@@ -112,8 +114,7 @@ class ProfilePage extends StatelessWidget {
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.analytics), label: 'Prediksi'),
+          BottomNavigationBarItem(icon: Icon(Icons.analytics), label: 'Prediksi'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Saya'),
         ],
       ),
@@ -123,7 +124,8 @@ class ProfilePage extends StatelessWidget {
   Widget _buildButton(BuildContext context, String title, IconData icon,
       {bool isLogout = false,
       bool isEditProfile = false,
-      bool isSecurity = false}) {
+      bool isSecurity = false,
+      bool isLanguage = false}) {
     return Container(
       width: double.infinity,
       margin: const EdgeInsets.only(bottom: 12),
@@ -140,6 +142,8 @@ class ProfilePage extends StatelessWidget {
                     phone: _maskPhoneNumber(phone),
                     email: _maskEmail(email),
                   ));
+            } else if (isLanguage) {
+              Get.to(() => const LanguageSelectionApp());
             } else {
               Get.offAll(() => const LoginScreen());
             }

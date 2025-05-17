@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../screens/login_screen.dart'; // Pastikan path-nya sesuai dengan struktur foldermu
 
 class SplashNextButton extends StatelessWidget {
@@ -24,8 +25,8 @@ class SplashNextButton extends StatelessWidget {
               MaterialPageRoute(builder: (context) => const LoginScreen()),
             );
           },
-          child: const Text(
-            'Mulai',
+          child:  Text(
+            'mulai'.tr,
             style: TextStyle(fontSize: 18, color: Colors.white),
           ),
         ),
