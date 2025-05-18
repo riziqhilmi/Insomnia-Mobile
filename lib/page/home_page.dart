@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../page/profile_page.dart';
 import 'education_page.dart';
 import 'prediski_page.dart';
+import 'tips_page.dart';
 import 'package:get/get.dart';
 import '../page/statistik_page.dart';
 
@@ -11,8 +12,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          const Color(0xFF0D1B2A), // Lebih gelap, cocok untuk malam
+      backgroundColor: const Color(0xFF0D1B2A),
       body: Stack(
         children: [
           // Bagian atas
@@ -131,9 +131,31 @@ class HomePage extends StatelessWidget {
                     ],
                   ),
                   const SizedBox(height: 30),
-                  SleepButton(text: 'Berita terkini tentang tidur'),
+                  SleepButton(
+                    text: 'Berita terkini tentang tidur',
+                    onPressed: () {
+                      // Arahkan ke halaman berita jika sudah tersedia
+                      Get.snackbar(
+                        'Info',
+                        'Fitur berita masih dalam pengembangan.',
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.deepPurple,
+                        colorText: Colors.white,
+                      );
+                    },
+                  ),
                   const SizedBox(height: 15),
-                  SleepButton(text: 'Tips dan Artikel Sehat'),
+                  SleepButton(
+                    text: 'Tips dan Artikel Sehat',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const TipsTidurPage(),
+                        ),
+                      );
+                    },
+                  ),
                 ],
               ),
             ),
@@ -146,13 +168,11 @@ class HomePage extends StatelessWidget {
         backgroundColor: const Color(0xFF1B263B),
         onTap: (index) {
           if (index == 2) {
-            // Navigasi ke halaman profil
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const ProfilePage()),
             );
           } else if (index == 1) {
-            // Navigasi ke halaman prediksi
             Navigator.push(
               context,
               MaterialPageRoute(
@@ -174,19 +194,19 @@ class HomePage extends StatelessWidget {
 class FeatureButton extends StatelessWidget {
   final IconData icon;
   final String label;
-  final VoidCallback? onTap; // Menambahkan onTap sebagai parameter opsional
+  final VoidCallback? onTap;
 
   const FeatureButton({
     super.key,
     required this.icon,
     required this.label,
-    this.onTap, // Inisialisasi parameter onTap
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap, // Menggunakan onTap saat widget diklik
+      onTap: onTap,
       child: Column(
         children: [
           CircleAvatar(
@@ -210,13 +230,18 @@ class FeatureButton extends StatelessWidget {
 
 class SleepButton extends StatelessWidget {
   final String text;
+  final VoidCallback? onPressed;
 
-  const SleepButton({super.key, required this.text});
+  const SleepButton({
+    super.key,
+    required this.text,
+    this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: Colors.deepPurple[600],
         foregroundColor: Colors.white,
