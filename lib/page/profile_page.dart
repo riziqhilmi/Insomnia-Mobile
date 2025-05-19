@@ -89,8 +89,6 @@ class ProfilePage extends StatelessWidget {
                       isEditProfile: true),
                   _buildButton(context, 'Keamanan & privasi', Icons.lock,
                       isSecurity: true),
-                  _buildButton(
-                      context, 'Peraturan notifikasi', Icons.notifications),
                   _buildButton(context, 'Bahasa', Icons.language,
                       isLanguage: true),
                   _buildButton(context, 'Tentang Aplikasi', Icons.info,

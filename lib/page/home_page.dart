@@ -41,7 +41,6 @@ class HomePage extends StatelessWidget {
                           ),
                         ),
                         const Spacer(),
-                        const Icon(Icons.notifications, color: Colors.white),
                       ],
                     ),
                     const SizedBox(height: 30),
@@ -146,7 +145,7 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   SleepButton(
-                    text: 'Tips Sehat',
+                    text: 'Tips tidur Sehat',
                     onPressed: () {
                       Navigator.push(
                         context,
