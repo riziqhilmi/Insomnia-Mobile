@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // Import GetX
 import 'package:insomnia_app/page/language_page.dart';
+import 'package:insomnia_app/page/prediski_page.dart';
 import '../screens/login_screen.dart';
 import '../screens/edit_profile_screen.dart';
 import '../screens/security_privacy_screen.dart';
@@ -70,7 +71,6 @@ class ProfilePage extends StatelessWidget {
             alignment: Alignment.bottomCenter,
             child: Container(
               padding: const EdgeInsets.all(24),
-              height: 400,
               decoration: const BoxDecoration(
                 color: Color(0xFF1B263B),
                 borderRadius: BorderRadius.vertical(top: Radius.circular(40)),
@@ -82,13 +82,16 @@ class ProfilePage extends StatelessWidget {
                   ),
                 ],
               ),
-              child: Column(
+              child: ListView(
+                shrinkWrap: true,
+                padding: EdgeInsets.zero,
                 children: [
                   _buildButton(context, 'Edit Profil Pengguna', Icons.edit,
                       isEditProfile: true),
                   _buildButton(context, 'Keamanan & privasi', Icons.lock,
                       isSecurity: true),
-                  _buildButton(context, 'Peraturan notifikasi', Icons.notifications),
+                  _buildButton(
+                      context, 'Peraturan notifikasi', Icons.notifications),
                   _buildButton(context, 'Bahasa', Icons.language,
                       isLanguage: true),
                   _buildButton(context, 'Tentang Aplikasi', Icons.info),
@@ -109,6 +112,7 @@ class ProfilePage extends StatelessWidget {
           if (index == 0) {
             Get.to(() => const HomePage());
           } else if (index == 1) {
+            Get.to(() => const SleepClassificationPage()); // Ganti dengan halaman prediksi
             // Tambahkan navigasi ke halaman prediksi jika ada
           }
         },
@@ -122,7 +126,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildButton(BuildContext context, String title, IconData icon,
-      {bool isLogout = false,
+     {bool isLogout = false,
       bool isEditProfile = false,
       bool isSecurity = false,
       bool isLanguage = false}) {
@@ -155,32 +159,6 @@ class ProfilePage extends StatelessWidget {
               snackPosition: SnackPosition.BOTTOM,
             ));
           }
-
-          // if (isLogout) {
-          //   // Navigasi ke halaman LoginScreen dengan menghapus semua halaman sebelumnya
-          //   Get.offAll(() => const LoginScreen());
-          // }
-          // else if (isEditProfile) {
-          //   // Navigasi ke EditProfileScreen
-          //   Get.to(() => const EditProfileScreen());
-          // } else if (isSecurity) {
-          //   // Navigasi ke SecurityPrivacyScreen dengan parameter wajib
-          //   Get.to(() => SecurityPrivacyScreen(
-          //         username: username,
-          //         phone: _maskPhoneNumber(phone),
-          //         email: _maskEmail(email),
-          //       ));
-          // } else {
-          //   // Get.snackbar('Info', 'Fitur $title belum diimplementasikan');
-          //   Get.showSnackbar(GetSnackBar(
-          //     message: 'Fitur $title belum diimplementasikan',
-          //     duration: const Duration(seconds: 2),
-          //     backgroundColor: Colors.red,
-          //     snackPosition: SnackPosition.BOTTOM,
-          //   ));
-          //   // Logika lainnya jika bukan tombol logout
-
-          // }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.deepPurple[600],

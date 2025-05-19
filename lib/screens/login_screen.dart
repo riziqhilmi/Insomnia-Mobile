@@ -1,12 +1,22 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import 'register_screen.dart';
 import '../page/home_page.dart';
 import 'forgot_password.dart';
+import 'package:http/http.dart' as myhttp;
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
+  @override
+  State<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
+  TextEditingController emailC = TextEditingController();
+  TextEditingController passwordC = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -50,38 +60,38 @@ class LoginScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 40),
-                const CustomTextField(
+                CustomTextField(
+                  controller: emailC,
                   icon: Icons.email_outlined,
                   hintText: "Masukkan email anda",
                   obscureText: false,
                 ),
-                const SizedBox(height: 20),
-                const CustomTextField(
+                SizedBox(height: 20),
+                CustomTextField(
+                  controller: passwordC,
                   icon: Icons.lock_outline,
                   hintText: "Masukkan password anda",
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
-                          TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) =>ForgotPasswordScreen ()),
-                );
-              },
-              child: const Text(
-                "Lupa Password?",
-                style: TextStyle(color: Colors.grey),
-              ),
-            ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ForgotPasswordScreen()),
+                    );
+                  },
+                  child: const Text(
+                    "Lupa Password?",
+                    style: TextStyle(color: Colors.grey),
+                  ),
+                ),
                 const SizedBox(height: 20),
                 CustomButton(
                   text: "Masuk",
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
+                    handleLogin(context, emailC, passwordC);
                   },
                 ),
                 const SizedBox(height: 30),
@@ -116,6 +126,66 @@ class LoginScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+bool checkEmail(String email) {
+  bool result = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+      .hasMatch(email);
+  return result;
+}
+Future<void> handleLogin(BuildContext context, TextEditingController emailC,
+    TextEditingController passwordC) async {
+  try {
+    if (!checkEmail(emailC.text)) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          showCloseIcon: true,
+          content: Text('Email tidak valid')),
+      );
+      return;
+    }
+
+    var responses = await myhttp.post(
+      Uri.parse('http://127.0.0.1:5000/login'),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'email': emailC.text,
+        'password': passwordC.text,
+      }),
+    );
+    if (!context.mounted) return;
+
+    if (responses.statusCode == 200) {
+      Map<String, dynamic> data = json.decode(responses.body);
+      if (data['status'] == 'success') {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+              backgroundColor: Colors.green,
+              showCloseIcon: true,
+              content: Text('Login successful')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomePage()),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data['message'])),
+        );
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Login failed')),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('An error occurred')),
     );
   }
 }

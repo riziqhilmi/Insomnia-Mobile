@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart'; // Import GetX
+import 'package:get/get.dart';
 import 'package:insomnia_app/utils/localization-service.dart';
 import 'screens/splash_screens.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';

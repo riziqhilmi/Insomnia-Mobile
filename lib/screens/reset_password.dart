@@ -24,7 +24,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
   void _handleResetPassword() {
     if (emailController.text.isEmpty || passwordController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Email dan kata sandi wajib diisi")),
+        const SnackBar(content: Text("kata sandi wajib diisi")),
       );
       return;
     }
@@ -110,7 +110,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "Masukkan email dan kata sandi baru Anda",
+                    "Masukkan sandi dan kata sandi baru Anda",
                     style: GoogleFonts.lato(
                       color: Colors.white70,
                       fontSize: 16,
@@ -119,9 +119,9 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                   const SizedBox(height: 24),
                   // Form input
                   CustomTextField(
-                    controller: emailController,
-                    icon: Icons.email,
-                    hintText: "Email",
+                    controller: passwordController,
+                    icon: Icons.lock_open,
+                    hintText: "Kata Sandi ",
                     obscureText: false,
                   ),
                   const SizedBox(height: 12),

@@ -206,8 +206,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                           controller: _emailController,
                           icon: Icons.email_outlined,
                           hint: "Email",
-                          validator: (val) =>
-                              val!.contains("@") ? null : 'Email tidak valid',
+                          validator: (val) => val!.contains("@") ? null : 'Email tidak valid',
                         ),
                         const SizedBox(height: 20),
 
@@ -219,8 +218,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                           obscure: !_isPasswordVisible,
                           suffix: _visibilityIcon(
                               _isPasswordVisible, () => setState(() => _isPasswordVisible = !_isPasswordVisible)),
-                          validator: (val) =>
-                              val!.length < 6 ? 'Minimal 6 karakter' : null,
+                          validator: (val) => val!.length < 6 ? 'Minimal 6 karakter' : null,
                         ),
                         const SizedBox(height: 20),
 
