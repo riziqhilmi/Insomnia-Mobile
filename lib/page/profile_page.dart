@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart'; // Import GetX
 import 'package:insomnia_app/page/language_page.dart';
+import 'package:insomnia_app/page/prediski_page.dart';
 import 'package:insomnia_app/page/tentangapk_page.dart'; // <-- Tambahkan ini
 import '../screens/login_screen.dart';
 import '../screens/edit_profile_screen.dart';
@@ -111,6 +112,7 @@ class ProfilePage extends StatelessWidget {
           if (index == 0) {
             Get.to(() => const HomePage());
           } else if (index == 1) {
+            Get.to(() => const SleepClassificationPage());
             // Tambahkan navigasi ke halaman prediksi jika ada
           }
         },

@@ -146,7 +146,7 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   SleepButton(
-                    text: 'Tips dan Artikel Sehat',
+                    text: 'Tips Sehat',
                     onPressed: () {
                       Navigator.push(
                         context,
