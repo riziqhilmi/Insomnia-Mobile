@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:insomnia_app/page/home_page.dart';
 import '../screens/login_screen.dart'; // Pastikan path-nya sesuai dengan struktur foldermu
 
 class SplashNextButton extends StatelessWidget {
@@ -22,6 +23,7 @@ class SplashNextButton extends StatelessWidget {
           onPressed: () {
             Navigator.push(
               context,
+              // MaterialPageRoute(builder: (context) => const HomePage()),
               MaterialPageRoute(builder: (context) => const LoginScreen()),
             );
           },

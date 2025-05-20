@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:animated_background/animated_background.dart';
+import 'package:insomnia_app/screens/login_screen.dart';
 import '../widgets/custom_button.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -13,52 +16,111 @@ class _RegisterScreenState extends State<RegisterScreen>
     with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
 
-  final _nameController = TextEditingController();
-  final _usernameController = TextEditingController();
+  final namaDepanC = TextEditingController();
+  final usernameC = TextEditingController();
   final _birthDateController = TextEditingController();
   final _phoneController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
-
+  String? _gender;
   bool _isPasswordVisible = false;
   bool _isConfirmVisible = false;
-  String? _gender; // Untuk menyimpan pilihan jenis kelamin
 
-  // Fungsi untuk membuka date picker
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
+      initialDate: DateTime(2000),
       firstDate: DateTime(1900),
       lastDate: DateTime.now(),
     );
     if (picked != null) {
       setState(() {
-        _birthDateController.text = "${picked.day}/${picked.month}/${picked.year}";
+        _birthDateController.text =
+            "${picked.day}/${picked.month}/${picked.year}";
       });
     }
   }
 
-  void _handleRegister() {
-    if (_formKey.currentState!.validate()) {
-      Navigator.pushReplacement(
-        context,
-        PageRouteBuilder(
-          transitionDuration: const Duration(milliseconds: 700),
-          pageBuilder: (_, __, ___) => const SuccessPage(),
-          transitionsBuilder: (_, animation, __, child) {
-            return FadeTransition(opacity: animation, child: child);
-          },
-        ),
+  Future<void> _handleRegister() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    final url = Uri.parse("http://127.0.0.1:5000/register");
+
+    final Map<String, dynamic> body = {
+      "nama_lengkap": namaDepanC.text,
+      "username": usernameC.text,
+      "jenis_kelamin": _gender,
+      "tanggal_lahir": _birthDateController.text,
+      "telepon": _phoneController.text,
+      "role": "user", // bisa disesuaikan
+      "email": _emailController.text,
+      "password": _passwordController.text,
+    };
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {"Content-Type": "application/json"},
+        body: jsonEncode(body),
       );
+
+      final data = jsonDecode(response.body);
+
+      if (response.statusCode == 200 &&
+          data['status'] == 'Registration successful') {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            backgroundColor: const Color(0xFF0B0F2F),
+            title:
+                const Text("Berhasil", style: TextStyle(color: Colors.white)),
+            content: const Text("Registrasi berhasil! Silakan login.",
+                style: TextStyle(color: Colors.white70)),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Tutup dialog
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (_) => const LoginScreen()),
+                  );
+                },
+                child: const Text("OK",
+                    style: TextStyle(color: Colors.cyanAccent)),
+              )
+            ],
+          ),
+        );
+      } else {
+        _showError(data['message'] ?? "Registrasi gagal. Coba lagi.");
+      }
+    } catch (e) {
+      _showError("Terjadi kesalahan saat menghubungi server.");
     }
+  }
+
+  void _showError(String message) {
+    showDialog(
+      context: context,
+      builder: (_) => AlertDialog(
+        backgroundColor: const Color(0xFF0B0F2F),
+        title: const Text("Gagal", style: TextStyle(color: Colors.white)),
+        content: Text(message, style: const TextStyle(color: Colors.white70)),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text("OK", style: TextStyle(color: Colors.cyanAccent)),
+          )
+        ],
+      ),
+    );
   }
 
   @override
   void dispose() {
-    _nameController.dispose();
-    _usernameController.dispose();
+    namaDepanC.dispose();
+    usernameC.dispose();
     _birthDateController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
@@ -73,7 +135,6 @@ class _RegisterScreenState extends State<RegisterScreen>
       backgroundColor: const Color(0xFF0B0F2F),
       body: Stack(
         children: [
-          // Partikel bintang
           AnimatedBackground(
             vsync: this,
             behaviour: RandomParticleBehaviour(
@@ -92,15 +153,12 @@ class _RegisterScreenState extends State<RegisterScreen>
             ),
             child: Container(),
           ),
-
-          // Bulan
           const Positioned(
             top: 70,
             right: 40,
-            child: Icon(Icons.nightlight_round, size: 80, color: Colors.white38),
+            child:
+                Icon(Icons.nightlight_round, size: 80, color: Colors.white38),
           ),
-
-          // Form Register
           SafeArea(
             child: Center(
               child: SingleChildScrollView(
@@ -110,7 +168,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                     gradient: LinearGradient(
                       colors: [
                         Colors.black.withOpacity(0.4),
-                        Colors.white.withOpacity(0.05),
+                        Colors.white.withOpacity(0.05)
                       ],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -134,117 +192,99 @@ class _RegisterScreenState extends State<RegisterScreen>
                             size: 72, color: Colors.white),
                         const SizedBox(height: 12),
                         const Text("Buat Akun Baru",
-                            style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.white60,
-                                fontWeight: FontWeight.w300)),
+                            style:
+                                TextStyle(fontSize: 16, color: Colors.white60)),
                         const Text("Sign Up",
                             style: TextStyle(
                                 fontSize: 32,
                                 fontWeight: FontWeight.bold,
                                 color: Colors.white)),
                         const SizedBox(height: 36),
-
-                        // Nama Lengkap
                         _buildInput(
-                          controller: _nameController,
-                          icon: Icons.person_outline,
-                          hint: "Nama Lengkap",
-                          validator: (val) => val!.isEmpty ? 'Nama tidak boleh kosong' : null,
-                        ),
+                            controller: namaDepanC,
+                            icon: Icons.person_outline,
+                            hint: "Nama Lengkap",
+                            validator: (val) => val!.isEmpty
+                                ? 'Nama tidak boleh kosong'
+                                : null),
                         const SizedBox(height: 20),
-
-                        // Username
                         _buildInput(
-                          controller: _usernameController,
-                          icon: Icons.person_outline,
-                          hint: "Username",
-                          validator: (val) => val!.isEmpty ? 'Username tidak boleh kosong' : null,
-                        ),
+                            controller: usernameC,
+                            icon: Icons.person_outline,
+                            hint: "Username",
+                            validator: (val) => val!.isEmpty
+                                ? 'Username tidak boleh kosong'
+                                : null),
                         const SizedBox(height: 20),
-
-                        // Jenis Kelamin (Dropdown)
                         _buildInput(
-                          controller: null, // Tidak perlu controller untuk dropdown
-                          icon: Icons.person_outline,
-                          hint: "Jenis Kelamin",
-                          validator: (val) => _gender == null ? 'Jenis kelamin harus dipilih' : null,
-                          dropdownItems: [
-                            const DropdownMenuItem(
-                              value: "Laki-laki",
-                              child: Text("Laki-laki"),
-                            ),
-                            const DropdownMenuItem(
-                              value: "Perempuan",
-                              child: Text("Perempuan"),
-                            ),
-                          ],
-                        ),
+                            controller: null,
+                            icon: Icons.person_outline,
+                            hint: "Jenis Kelamin",
+                            validator: (val) =>
+                                _gender == null ? 'Pilih jenis kelamin' : null,
+                            dropdownItems: const [
+                              DropdownMenuItem(
+                                  value: "Laki-laki", child: Text("Laki-laki")),
+                              DropdownMenuItem(
+                                  value: "Perempuan", child: Text("Perempuan")),
+                            ]),
                         const SizedBox(height: 20),
-
-                        // Tanggal Lahir (Date Picker)
                         _buildInput(
-                          controller: _birthDateController,
-                          icon: Icons.calendar_today,
-                          hint: "Tanggal Lahir",
-                          validator: (val) => val!.isEmpty ? 'Tanggal lahir tidak boleh kosong' : null,
-                          isDatePicker: true,
-                        ),
+                            controller: _birthDateController,
+                            icon: Icons.calendar_today,
+                            hint: "Tanggal Lahir",
+                            isDatePicker: true,
+                            validator: (val) => val!.isEmpty
+                                ? 'Tanggal lahir wajib diisi'
+                                : null),
                         const SizedBox(height: 20),
-
-                        // Nomor Telepon (Keyboard Numerik)
                         _buildInput(
-                          controller: _phoneController,
-                          icon: Icons.phone,
-                          hint: "Nomor telepon",
-                          validator: (val) => val!.isEmpty ? 'Nomor telepon tidak boleh kosong' : null,
-                        ),
+                            controller: _phoneController,
+                            icon: Icons.phone,
+                            hint: "Nomor Telepon",
+                            validator: (val) =>
+                                val!.isEmpty ? 'Telepon wajib diisi' : null),
                         const SizedBox(height: 20),
-
-                        // Email
                         _buildInput(
-                          controller: _emailController,
-                          icon: Icons.email_outlined,
-                          hint: "Email",
-                          validator: (val) => val!.contains("@") ? null : 'Email tidak valid',
-                        ),
+                            controller: _emailController,
+                            icon: Icons.email_outlined,
+                            hint: "Email",
+                            validator: (val) => val!.contains("@")
+                                ? null
+                                : 'Email tidak valid'),
                         const SizedBox(height: 20),
-
-                        // Password
                         _buildInput(
-                          controller: _passwordController,
-                          icon: Icons.lock_outline,
-                          hint: "Password",
-                          obscure: !_isPasswordVisible,
-                          suffix: _visibilityIcon(
-                              _isPasswordVisible, () => setState(() => _isPasswordVisible = !_isPasswordVisible)),
-                          validator: (val) => val!.length < 6 ? 'Minimal 6 karakter' : null,
-                        ),
+                            controller: _passwordController,
+                            icon: Icons.lock_outline,
+                            hint: "Password",
+                            obscure: !_isPasswordVisible,
+                            suffix: _visibilityIcon(_isPasswordVisible, () {
+                              setState(() =>
+                                  _isPasswordVisible = !_isPasswordVisible);
+                            }),
+                            validator: (val) =>
+                                val!.length < 6 ? 'Minimal 6 karakter' : null),
                         const SizedBox(height: 20),
-
-                        // Konfirmasi Password
                         _buildInput(
-                          controller: _confirmPasswordController,
-                          icon: Icons.lock_outline,
-                          hint: "Konfirmasi Password",
-                          obscure: !_isConfirmVisible,
-                          suffix: _visibilityIcon(
-                              _isConfirmVisible, () => setState(() => _isConfirmVisible = !_isConfirmVisible)),
-                          validator: (val) => val != _passwordController.text
-                              ? 'Password tidak cocok'
-                              : null,
-                        ),
+                            controller: _confirmPasswordController,
+                            icon: Icons.lock_outline,
+                            hint: "Konfirmasi Password",
+                            obscure: !_isConfirmVisible,
+                            suffix: _visibilityIcon(_isConfirmVisible, () {
+                              setState(
+                                  () => _isConfirmVisible = !_isConfirmVisible);
+                            }),
+                            validator: (val) => val != _passwordController.text
+                                ? 'Password tidak cocok'
+                                : null),
                         const SizedBox(height: 30),
-
                         CustomButton(
                           text: "Daftar",
                           onPressed: _handleRegister,
                           gradient: const LinearGradient(
-                            colors: [Colors.cyan, Colors.blueAccent],
-                          ),
+                              colors: [Colors.cyan, Colors.blueAccent]),
                         ),
                         const SizedBox(height: 25),
-
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -265,7 +305,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                 ),
               ),
             ),
-          )
+          ),
         ],
       ),
     );
@@ -287,18 +327,7 @@ class _RegisterScreenState extends State<RegisterScreen>
         child: AbsorbPointer(
           child: TextFormField(
             controller: controller,
-            decoration: InputDecoration(
-              filled: true,
-              fillColor: Colors.white10,
-              prefixIcon: Icon(icon, color: Colors.white70),
-              hintText: hint,
-              hintStyle: const TextStyle(color: Colors.white38),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide.none,
-              ),
-              contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-            ),
+            decoration: _inputDecoration(icon, hint),
             style: const TextStyle(color: Colors.white),
             validator: validator,
             enabled: false,
@@ -308,26 +337,11 @@ class _RegisterScreenState extends State<RegisterScreen>
     } else if (dropdownItems != null) {
       return DropdownButtonFormField<String>(
         value: _gender,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white10,
-          prefixIcon: Icon(icon, color: Colors.white70),
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.white38),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-        ),
+        decoration: _inputDecoration(icon, hint),
         style: const TextStyle(color: Colors.white),
-        dropdownColor: const Color(0xFF0B0F2F), // Sesuai tema
+        dropdownColor: const Color(0xFF0B0F2F),
         items: dropdownItems,
-        onChanged: (String? newValue) {
-          setState(() {
-            _gender = newValue;
-          });
-        },
+        onChanged: (value) => setState(() => _gender = value),
         validator: validator,
       );
     } else {
@@ -336,22 +350,26 @@ class _RegisterScreenState extends State<RegisterScreen>
         obscureText: obscure,
         validator: validator,
         style: const TextStyle(color: Colors.white),
-        keyboardType: hint == "Nomor telepon" ? TextInputType.number : TextInputType.text,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: Colors.white10,
-          prefixIcon: Icon(icon, color: Colors.white70),
-          suffixIcon: suffix,
-          hintText: hint,
-          hintStyle: const TextStyle(color: Colors.white38),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(14),
-            borderSide: BorderSide.none,
-          ),
-          contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
-        ),
+        keyboardType:
+            hint == "Nomor Telepon" ? TextInputType.phone : TextInputType.text,
+        decoration: _inputDecoration(icon, hint).copyWith(suffixIcon: suffix),
       );
     }
+  }
+
+  InputDecoration _inputDecoration(IconData icon, String hint) {
+    return InputDecoration(
+      filled: true,
+      fillColor: Colors.white10,
+      prefixIcon: Icon(icon, color: Colors.white70),
+      hintText: hint,
+      hintStyle: const TextStyle(color: Colors.white38),
+      border: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(14),
+        borderSide: BorderSide.none,
+      ),
+      contentPadding: const EdgeInsets.symmetric(vertical: 18, horizontal: 16),
+    );
   }
 
   Widget _visibilityIcon(bool visible, VoidCallback onPressed) {

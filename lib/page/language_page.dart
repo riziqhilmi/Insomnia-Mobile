@@ -1,38 +1,20 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
-
-void main() {
-  runApp(const LanguageSelectionApp());
-}
-
-class LanguageSelectionApp extends StatelessWidget {
-  const LanguageSelectionApp({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Language Selection',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        fontFamily: 'Poppins',
-        scaffoldBackgroundColor: Colors.transparent,
-        brightness: Brightness.dark,
-      ),
-      home: const LanguageSelectionScreen(),
-    );
-  }
-}
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LanguageSelectionScreen extends StatefulWidget {
   const LanguageSelectionScreen({Key? key}) : super(key: key);
 
   @override
-  State<LanguageSelectionScreen> createState() => _LanguageSelectionScreenState();
+  State<LanguageSelectionScreen> createState() =>
+      _LanguageSelectionScreenState();
 }
 
 class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
     with SingleTickerProviderStateMixin {
-  String selectedLanguage = 'en';
+  String selectedLanguage = '';
+  String selectedCountryCode = '';
   late AnimationController _controller;
   List<StarModel> stars = [];
   List<ZModel> zIcons = [];
@@ -45,6 +27,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
       duration: const Duration(seconds: 20),
     )..repeat();
 
+    //Get Language
+    getLanguage();
     // Create stars
     for (int i = 0; i < 100; i++) {
       stars.add(StarModel(
@@ -61,6 +45,33 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
       ZModel(bottom: 210, right: 70, size: 30, delay: 1),
       ZModel(bottom: 250, right: 110, size: 38, delay: 2),
     ];
+  }
+
+  void changeLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString("language_code", selectedLanguage);
+    if (selectedLanguage == "id") {
+      prefs.setString("country_code", "ID");
+      selectedCountryCode = "ID";
+    } else {
+      prefs.setString("country_code", "US");
+      selectedCountryCode = "US";
+    }
+    Get.updateLocale(Locale(selectedLanguage, selectedCountryCode));
+  }
+
+  void getLanguage() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      selectedLanguage = prefs.getString("language_code") ?? 'id';
+    });
+    if (selectedLanguage == "id") {
+      selectedCountryCode = "ID";
+    } else {
+      selectedCountryCode = "US";
+    }
+
+    Get.updateLocale(Locale(selectedLanguage, selectedCountryCode));
   }
 
   @override
@@ -140,7 +151,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
               builder: (context, child) {
                 return Positioned(
                   top: 30,
-                  left: 40 + (_controller.value * MediaQuery.of(context).size.width),
+                  left: 40 +
+                      (_controller.value * MediaQuery.of(context).size.width),
                   child: Opacity(
                     opacity: 0.05,
                     child: Container(
@@ -155,13 +167,16 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
                 );
               },
             ),
-            
+
             AnimatedBuilder(
               animation: _controller,
               builder: (context, child) {
                 return Positioned(
                   bottom: 60,
-                  right: 50 + (_controller.value * MediaQuery.of(context).size.width * -1),
+                  right: 50 +
+                      (_controller.value *
+                          MediaQuery.of(context).size.width *
+                          -1),
                   child: Opacity(
                     opacity: 0.05,
                     child: Container(
@@ -208,12 +223,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
                   ),
                   onPressed: () {
                     // Handle back button press
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Back button pressed'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
+                    //  Get.offAll(() => const ProfilePage());
+                    Navigator.pop(context);
                   },
                 ),
               ),
@@ -244,7 +255,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
                   children: [
                     // Header
                     Text(
-                      'Choose Your Language',
+                      'pilih_bahasa'.tr,
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: 24,
@@ -253,7 +264,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Select your preferred language to continue',
+                      'Pilih bahasa pilihan Anda untuk melanjutkan'.tr,
                       style: TextStyle(
                         color: const Color(0xFFA0AEC0),
                         fontSize: 14,
@@ -261,7 +272,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
                       textAlign: TextAlign.center,
                     ),
                     const SizedBox(height: 25),
-                    
+
                     // Language buttons
                     _buildLanguageButton(
                       flagText: 'EN',
@@ -278,51 +289,45 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
                       value: 'id',
                       flagColor: Colors.red.shade800,
                     ),
-                    
+
                     const SizedBox(height: 25),
-                    
+
                     // Continue button
-                    ElevatedButton(
-                      onPressed: () {
-                        // Handle language confirmation
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Selected language: $selectedLanguage'),
-                            duration: const Duration(seconds: 1),
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.transparent,
-                        padding: EdgeInsets.zero,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                      ),
-                      child: Ink(
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF4568DC), Color(0xFF5F78DC)],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
-                          ),
-                          borderRadius: BorderRadius.circular(12),
-                        ),
-                        child: Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(vertical: 14),
-                          child: const Text(
-                            'Continue',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
+                    // ElevatedButton(
+                    //   onPressed: () {
+                    //     // print(selectedCountryCode);
+                    //   },
+                    //   style: ElevatedButton.styleFrom(
+                    //     backgroundColor: Colors.transparent,
+                    //     padding: EdgeInsets.zero,
+                    //     shape: RoundedRectangleBorder(
+                    //       borderRadius: BorderRadius.circular(12),
+                    //     ),
+                    //   ),
+                    //   child: Ink(
+                    //     decoration: BoxDecoration(
+                    //       gradient: const LinearGradient(
+                    //         colors: [Color(0xFF4568DC), Color(0xFF5F78DC)],
+                    //         begin: Alignment.centerLeft,
+                    //         end: Alignment.centerRight,
+                    //       ),
+                    //       borderRadius: BorderRadius.circular(12),
+                    //     ),
+                    //     child: Container(
+                    //       width: double.infinity,
+                    //       padding: const EdgeInsets.symmetric(vertical: 14),
+                    //       child: const Text(
+                    //         'Continue',
+                    //         textAlign: TextAlign.center,
+                    //         style: TextStyle(
+                    //           color: Colors.white,
+                    //           fontSize: 16,
+                    //           fontWeight: FontWeight.w500,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -341,19 +346,20 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
     required Color flagColor,
   }) {
     final bool isSelected = selectedLanguage == value;
-    
+
     return InkWell(
       onTap: () {
         setState(() {
+          changeLanguage();
           selectedLanguage = value;
         });
       },
       child: Container(
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: isSelected 
-            ? const Color(0xFF4E65A8).withOpacity(0.7)
-            : const Color(0xFF2D375A).withOpacity(0.6),
+          color: isSelected
+              ? const Color(0xFF4E65A8).withOpacity(0.7)
+              : const Color(0xFF2D375A).withOpacity(0.6),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: isSelected
@@ -390,7 +396,7 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
               ),
             ),
             const SizedBox(width: 15),
-            
+
             // Language info
             Expanded(
               child: Column(
@@ -414,9 +420,9 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
                 ],
               ),
             ),
-            
+
             // Selected indicator
-            if (isSelected) 
+            if (isSelected)
               Container(
                 width: 24,
                 height: 24,
@@ -445,7 +451,8 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
           left: star.left * MediaQuery.of(context).size.width,
           top: star.top * MediaQuery.of(context).size.height,
           child: Opacity(
-            opacity: (sin(value * pi * 2 + star.delay) + 1) / 2, // Twinkle effect
+            opacity:
+                (sin(value * pi * 2 + star.delay) + 1) / 2, // Twinkle effect
             child: Container(
               width: star.size,
               height: star.size,
@@ -466,13 +473,12 @@ class _LanguageSelectionScreenState extends State<LanguageSelectionScreen>
       duration: const Duration(seconds: 10),
       builder: (context, value, child) {
         // Create a float-up animation
-        final position = value < 0.5 
-            ? Curves.easeInOut.transform(value * 2) * 100 
-            : 100;
-        final opacity = value < 0.2 
-            ? Curves.easeIn.transform(value * 5) 
+        final position =
+            value < 0.5 ? Curves.easeInOut.transform(value * 2) * 100 : 100;
+        final opacity = value < 0.2
+            ? Curves.easeIn.transform(value * 5)
             : (value > 0.8 ? Curves.easeOut.transform((1 - value) * 5) : 1.0);
-            
+
         return Positioned(
           bottom: z.bottom.toDouble() + position,
           right: z.right.toDouble(),

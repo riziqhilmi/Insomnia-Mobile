@@ -92,9 +92,9 @@ class ProfilePage extends StatelessWidget {
                       isSecurity: true),
                   _buildButton(
                       context, 'Peraturan notifikasi', Icons.notifications),
-                  _buildButton(context, 'Bahasa', Icons.language,
+                  _buildButton(context, 'bahasa'.tr, Icons.language,
                       isLanguage: true),
-                  _buildButton(context, 'Tentang Aplikasi', Icons.info,
+                  _buildButton(context, 'Tentang Aplikasi'.tr, Icons.info,
                       isAboutApp: true), // <- Tambahkan flag baru
                   _buildButton(context, 'Keluar Akun', Icons.logout,
                       isLogout: true),
@@ -148,7 +148,7 @@ class ProfilePage extends StatelessWidget {
                     email: _maskEmail(email),
                   ));
             } else if (isLanguage) {
-              Get.to(() => const LanguageSelectionApp());
+              Get.to(() => const LanguageSelectionScreen());
             } else if (isAboutApp) {
               Get.to(() => const TentangAplikasiPage());
             } else if (isLogout) {
