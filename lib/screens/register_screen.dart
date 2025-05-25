@@ -44,7 +44,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final url = Uri.parse("http://localhost:5000/register");
+    final url = Uri.parse("http://192.168.1.7:5000/register");
 
     final Map<String, dynamic> body = {
       "name": namaDepanC.text,

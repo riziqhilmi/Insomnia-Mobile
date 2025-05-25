@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SleepClassificationPage extends StatefulWidget {
   const SleepClassificationPage({Key? key}) : super(key: key);
@@ -17,7 +18,7 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
   // Form values
   String? _year;
   String? _gender;
-  String? _sleepHours ;
+  String? _sleepHours;
   String? _concentrationDifficulty;
   String? _missClass;
   String? _deviceUse;
@@ -25,7 +26,6 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
   String? _exercise;
   String? _stressLevel;
   String? _academicPerformance;
-  // We don't include insomnia_level as it will be calculated
 
   @override
   void initState() {
@@ -62,16 +62,152 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
     }
   }
 
-  void _processClassification() {
-    // Here you would implement your classification algorithm
-    // For now we'll just show a dialog with a success message
+  Future<void> _processClassification() async {
+    // Validasi semua field terisi
+    if (_year == null ||
+        _gender == null ||
+        _sleepHours == null ||
+        _concentrationDifficulty == null ||
+        _missClass == null ||
+        _deviceUse == null ||
+        _caffeine == null ||
+        _exercise == null ||
+        _stressLevel == null ||
+        _academicPerformance == null) {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: const Color(0xFF1E2746),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'Data Tidak Lengkap',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: const Text(
+            'Harap isi semua field sebelum melakukan klasifikasi.',
+            style: TextStyle(color: Colors.white70),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'OK',
+                style: TextStyle(color: Colors.deepPurple),
+              ),
+            ),
+          ],
+        ),
+      );
+      return;
+    }
+
+    // Tampilkan loading indicator
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(
+        child: CircularProgressIndicator(
+          color: Colors.deepPurple,
+        ),
+      ),
+    );
+
+    try {
+      // Buat request object
+      final request = {
+        'year': _year,
+        'gender': _gender,
+        'sleep_hours': _sleepHours,
+        'concentration_difficulty': _concentrationDifficulty,
+        'miss_class': _missClass,
+        'device_use': _deviceUse,
+        'caffeine': _caffeine,
+        'exercise': _exercise,
+        'stress_level': _stressLevel,
+        'academic_performance': _academicPerformance,
+      };
+
+      // Panggil API
+      final response = await http.post(
+        Uri.parse(
+            'http://127.0.0.1:5000/predict'), // Ganti dengan IP server Flask Anda
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(request),
+      );
+
+      // Tutup loading indicator
+      Navigator.pop(context);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        _showResultDialog(data);
+      } else {
+        throw Exception('Failed to get prediction: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Tutup loading indicator jika ada error
+      Navigator.pop(context);
+
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          backgroundColor: const Color(0xFF1E2746),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20),
+          ),
+          title: const Text(
+            'Error',
+            style: TextStyle(color: Colors.white),
+          ),
+          content: Text(
+            'Terjadi kesalahan: $e',
+            style: const TextStyle(color: Colors.white70),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text(
+                'OK',
+                style: TextStyle(color: Colors.deepPurple),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+  }
+
+  void _showResultDialog(Map<String, dynamic> response) {
+    String resultText;
+    Color resultColor;
+
+    switch (response['prediction']) {
+      case 0:
+        resultText = 'Tidak ada insomnia';
+        resultColor = Colors.green;
+        break;
+      case 1:
+        resultText = 'Insomnia ringan';
+        resultColor = Colors.orange;
+        break;
+      case 2:
+        resultText = 'Insomnia berat';
+        resultColor = Colors.red;
+        break;
+      default:
+        resultText = 'Hasil tidak diketahui';
+        resultColor = Colors.grey;
+    }
+
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
         backgroundColor: const Color(0xFF1E2746),
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
-          'Klasifikasi Berhasil',
+          'Hasil Klasifikasi',
           style: TextStyle(color: Colors.white),
           textAlign: TextAlign.center,
         ),
@@ -83,11 +219,33 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
               decoration: BoxDecoration(
                 color: const Color(0xFF131C3D),
                 borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: resultColor.withOpacity(0.5),
+                  width: 2,
+                ),
               ),
-              child: const Text(
-                'Data telah diproses. Hasil klasifikasi: Risiko Insomnia',
-                style: TextStyle(color: Colors.white70),
-                textAlign: TextAlign.center,
+              child: Column(
+                children: [
+                  Text(
+                    resultText,
+                    style: TextStyle(
+                      color: resultColor,
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Tingkat insomnia: ${response['prediction']}',
+                    style: const TextStyle(color: Colors.white70),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Status: ${response['result']}',
+                    style: const TextStyle(color: Colors.white70),
+                  ),
+                ],
               ),
             ),
             const SizedBox(height: 24),
@@ -238,7 +396,15 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             title: 'Lama Tidur (jam)',
             hint: 'Pilih lama tidur',
             value: _sleepHours,
-            items: const ['Lebih dari 8 jam', '7-8 jam', '6-7 jam', '5-6 jam', '4-5 jam','Kurang dari 4 jam','Kurang dari 5 jam'],
+            items: const [
+              'Lebih dari 8 jam',
+              '7-8 jam',
+              '6-7 jam',
+              '5-6 jam',
+              '4-5 jam',
+              'Kurang dari 4 jam',
+              'Kurang dari 5 jam'
+            ],
             onChanged: (val) => setState(() => _sleepHours = val),
           ),
           const SizedBox(height: 40),
@@ -260,7 +426,14 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             title: 'Penggunaan Perangkat Sebelum Tidur',
             hint: 'Pilih frekuensi',
             value: _deviceUse,
-            items: const ['Tidak Pernah','Jarang','Kadang-kadang', 'Selalu', 'Sering','Setiap malam'],
+            items: const [
+              'Tidak Pernah',
+              'Jarang',
+              'Kadang-kadang',
+              'Selalu',
+              'Sering',
+              'Setiap malam'
+            ],
             onChanged: (val) => setState(() => _deviceUse = val),
           ),
           const SizedBox(height: 16),
@@ -268,7 +441,15 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             title: 'Konsumsi Kafein',
             hint: 'Pilih jawaban',
             value: _caffeine,
-            items: const ['Tidak pernah', 'Jarang (1-2 kali/minggu)','Kadang-kadang (3-4/minggu)','Sering (5-6 kali/minggu)','Setiap hari', 'Ya', 'Tidak'],
+            items: const [
+              'Tidak pernah',
+              'Jarang (1-2 kali/minggu)',
+              'Kadang-kadang (3-4/minggu)',
+              'Sering (5-6 kali/minggu)',
+              'Setiap hari',
+              'Ya',
+              'Tidak'
+            ],
             onChanged: (val) => setState(() => _caffeine = val),
           ),
           const SizedBox(height: 16),
@@ -276,7 +457,15 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             title: 'Aktivitas Olahraga',
             hint: 'Pilih jawaban',
             value: _exercise,
-            items: const ['Tidak pernah', 'Jarang (1-2 kali/minggu)','Kadang-kadang (3-4/minggu)','Sering (5-6 kali/minggu)','Setiap hari', 'Ya', 'Tidak'],
+            items: const [
+              'Tidak pernah',
+              'Jarang (1-2 kali/minggu)',
+              'Kadang-kadang (3-4/minggu)',
+              'Sering (5-6 kali/minggu)',
+              'Setiap hari',
+              'Ya',
+              'Tidak'
+            ],
             onChanged: (val) => setState(() => _exercise = val),
           ),
           const SizedBox(height: 40),
@@ -298,7 +487,13 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             title: 'Kesulitan Konsentrasi',
             hint: 'Pilih frekuensi',
             value: _concentrationDifficulty,
-            items: const ['Tidak Pernah', 'Jarang','Kadang-kadang', 'Sering', 'Selalu'],
+            items: const [
+              'Tidak Pernah',
+              'Jarang',
+              'Kadang-kadang',
+              'Sering',
+              'Selalu'
+            ],
             onChanged: (val) => setState(() => _concentrationDifficulty = val),
           ),
           const SizedBox(height: 16),
@@ -306,7 +501,12 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             title: 'Ketidakhadiran Kuliah',
             hint: 'Pilih frekuensi',
             value: _missClass,
-            items: const ['Tidak Pernah','Jarang(1-2 kali/bulan)', 'Kadang-kadang', 'Sering'],
+            items: const [
+              'Tidak Pernah',
+              'Jarang(1-2 kali/bulan)',
+              'Kadang-kadang',
+              'Sering'
+            ],
             onChanged: (val) => setState(() => _missClass = val),
           ),
           const SizedBox(height: 16),
@@ -314,7 +514,14 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             title: 'Tingkat Stres',
             hint: 'Pilih tingkat stres',
             value: _stressLevel,
-            items: const ['Tidak Stress', 'Stress rendah', 'Stress sedang', 'Stress tinggi','Sangat tinggi','Esktrem'],
+            items: const [
+              'Tidak Stress',
+              'Stress rendah',
+              'Stress sedang',
+              'Stress tinggi',
+              'Sangat tinggi',
+              'Esktrem'
+            ],
             onChanged: (val) => setState(() => _stressLevel = val),
           ),
           const SizedBox(height: 16),
@@ -322,7 +529,13 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             title: 'Performa Akademik',
             hint: 'Pilih performa',
             value: _academicPerformance,
-            items: const ['Sangat baik', 'Baik', 'Cukup', 'Dibawah rata-rata', 'Buruk'],
+            items: const [
+              'Sangat baik',
+              'Baik',
+              'Cukup',
+              'Dibawah rata-rata',
+              'Buruk'
+            ],
             onChanged: (val) => setState(() => _academicPerformance = val),
           ),
           const SizedBox(height: 40),
@@ -434,95 +647,6 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
     );
   }
 
-  Widget _buildSliderField({
-    required String title,
-    required double value,
-    required double min,
-    required double max,
-    required int divisions,
-    required Function(double) onChanged,
-  }) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: const Color(0xFF1E2746),
-        borderRadius: BorderRadius.circular(15),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.2),
-            blurRadius: 8,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white70,
-                  fontSize: 14,
-                ),
-              ),
-              Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                decoration: BoxDecoration(
-                  color: Colors.deepPurple.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Text(
-                  value.toString(),
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          SliderTheme(
-            data: SliderTheme.of(context).copyWith(
-              activeTrackColor: Colors.deepPurple,
-              inactiveTrackColor: Colors.deepPurple.withOpacity(0.2),
-              thumbColor: Colors.white,
-              overlayColor: Colors.deepPurple.withOpacity(0.2),
-              trackHeight: 4,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 6),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 14),
-            ),
-            child: Slider(
-              value: value,
-              min: min,
-              max: max,
-              divisions: divisions,
-              onChanged: onChanged,
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                min.toString(),
-                style: TextStyle(
-                    color: Colors.white.withOpacity(0.5), fontSize: 12),
-              ),
-              Text(
-                max.toString(),
-                style: TextStyle(
-                    color: Colors.white.withOpacity(0.5), fontSize: 12),
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildNavigationButtons({
     bool isFirstPage = false,
     bool isLastPage = false,
@@ -549,8 +673,10 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
         ElevatedButton.icon(
           onPressed: _nextPage,
           label: Text(isLastPage ? 'Klasifikasi' : 'Lanjut'),
-          icon: Icon(isLastPage ? Icons.check_circle : Icons.arrow_forward_ios,
-          size: 16),
+          icon: Icon(
+            isLastPage ? Icons.check_circle : Icons.arrow_forward_ios,
+            size: 16,
+          ),
           style: ElevatedButton.styleFrom(
             foregroundColor: Colors.white,
             backgroundColor: isLastPage ? Colors.green : Colors.deepPurple,
