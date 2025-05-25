@@ -15,7 +15,6 @@ class RegisterScreen extends StatefulWidget {
 class _RegisterScreenState extends State<RegisterScreen>
     with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
-
   final namaDepanC = TextEditingController();
   final usernameC = TextEditingController();
   final _birthDateController = TextEditingController();
@@ -45,15 +44,15 @@ class _RegisterScreenState extends State<RegisterScreen>
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final url = Uri.parse("http://127.0.0.1:5000/register");
+    final url = Uri.parse("http://localhost:5000/register");
 
     final Map<String, dynamic> body = {
-      "nama_lengkap": namaDepanC.text,
+      "name": namaDepanC.text,
       "username": usernameC.text,
       "jenis_kelamin": _gender,
       "tanggal_lahir": _birthDateController.text,
       "telepon": _phoneController.text,
-      "role": "user", // bisa disesuaikan
+      "role": "user",
       "email": _emailController.text,
       "password": _passwordController.text,
     };
@@ -67,20 +66,19 @@ class _RegisterScreenState extends State<RegisterScreen>
 
       final data = jsonDecode(response.body);
 
-      if (response.statusCode == 200 &&
-          data['status'] == 'Registration successful') {
+      if (response.statusCode == 200 && data['status'] == 'success') {
         showDialog(
           context: context,
           builder: (_) => AlertDialog(
             backgroundColor: const Color(0xFF0B0F2F),
             title:
                 const Text("Berhasil", style: TextStyle(color: Colors.white)),
-            content: const Text("Registrasi berhasil! Silakan login.",
-                style: TextStyle(color: Colors.white70)),
+            content: Text(data['message'] ?? "Registrasi berhasil!",
+                style: const TextStyle(color: Colors.white70)),
             actions: [
               TextButton(
                 onPressed: () {
-                  Navigator.pop(context); // Tutup dialog
+                  Navigator.pop(context);
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(builder: (_) => const LoginScreen()),
@@ -221,7 +219,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                             icon: Icons.person_outline,
                             hint: "Jenis Kelamin",
                             validator: (val) =>
-                                _gender == null ? 'Pilih jenis kelamin' : null,
+                                val == null ? 'Pilih jenis kelamin' : null,
                             dropdownItems: const [
                               DropdownMenuItem(
                                   value: "Laki-laki", child: Text("Laki-laki")),
@@ -336,7 +334,10 @@ class _RegisterScreenState extends State<RegisterScreen>
       );
     } else if (dropdownItems != null) {
       return DropdownButtonFormField<String>(
-        value: _gender,
+        value: _gender != null &&
+                dropdownItems.any((item) => item.value == _gender)
+            ? _gender
+            : null,
         decoration: _inputDecoration(icon, hint),
         style: const TextStyle(color: Colors.white),
         dropdownColor: const Color(0xFF0B0F2F),
@@ -377,23 +378,6 @@ class _RegisterScreenState extends State<RegisterScreen>
       icon: Icon(visible ? Icons.visibility : Icons.visibility_off,
           color: Colors.white70),
       onPressed: onPressed,
-    );
-  }
-}
-
-class SuccessPage extends StatelessWidget {
-  const SuccessPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF0B0F2F),
-      body: const Center(
-        child: Text(
-          "Registrasi Berhasil!",
-          style: TextStyle(color: Colors.white, fontSize: 24),
-        ),
-      ),
     );
   }
 }

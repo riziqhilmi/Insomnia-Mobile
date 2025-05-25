@@ -65,21 +65,22 @@ class _SecurityPrivacyScreenState extends State<SecurityPrivacyScreen>
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                   colors: [
-                    Color(0xFF1C2526), // Biru gelap
-                    Color(0xFF2E1A47), // Ungu muda
+                    Color(0xFF1C2526),
+                    Color(0xFF2E1A47),
                   ],
                 ),
               ),
             ),
           ),
 
-          // Elemen dekoratif (Bulan dan Karakter Tidur)
+          // Elemen dekoratif
           Positioned(
             top: 60,
             left: 20,
             child: Row(
               children: [
-                const Icon(Icons.brightness_low, size: 40, color: Colors.white30),
+                const Icon(Icons.brightness_low,
+                    size: 40, color: Colors.white30),
                 const SizedBox(width: 10),
                 Text(
                   "Profil Saya",
@@ -123,13 +124,23 @@ class _SecurityPrivacyScreenState extends State<SecurityPrivacyScreen>
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 150), // Jarak dari elemen dekoratif
+                  // Tombol kembali
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(
+                      Icons.arrow_back_ios_rounded,
+                      color: Colors.white38,
+                      size: 20,
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+
+                  const SizedBox(height: 120), // Jarak dari elemen dekoratif
                   _buildProfileItem(
                     icon: Icons.person_outline,
                     title: "Username",
                     value: widget.username,
                     onTap: () {
-                      // Navigasi ke halaman edit username
                       print("Edit Username");
                     },
                   ),
@@ -139,7 +150,6 @@ class _SecurityPrivacyScreenState extends State<SecurityPrivacyScreen>
                     title: "No. Handphone",
                     value: widget.phone,
                     onTap: () {
-                      // Navigasi ke halaman edit nomor handphone
                       print("Edit No. Handphone");
                     },
                   ),
@@ -149,7 +159,6 @@ class _SecurityPrivacyScreenState extends State<SecurityPrivacyScreen>
                     title: "Email",
                     value: widget.email,
                     onTap: () {
-                      // Navigasi ke halaman edit email
                       print("Edit Email");
                     },
                   ),
@@ -159,7 +168,6 @@ class _SecurityPrivacyScreenState extends State<SecurityPrivacyScreen>
                     title: "Ganti Password",
                     value: "",
                     onTap: () {
-                      // Navigasi ke halaman ganti password
                       print("Ganti Password");
                     },
                   ),
@@ -242,7 +250,8 @@ class MoonPainter extends CustomPainter {
     final darkPaint = Paint()
       ..color = Colors.blueGrey.withOpacity(0.3)
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(size.width / 2 + 10, size.height / 2 - 10), 20, darkPaint);
+    canvas.drawCircle(
+        Offset(size.width / 2 + 10, size.height / 2 - 10), 20, darkPaint);
   }
 
   @override
@@ -259,7 +268,7 @@ class SleepingCharacterPainter extends CustomPainter {
     // Kepala karakter
     canvas.drawCircle(Offset(size.width / 2, size.height / 2 - 20), 20, paint);
 
-    // Badan (sederhana)
+    // Badan
     final bodyPaint = Paint()
       ..color = Colors.blue.withOpacity(0.7)
       ..style = PaintingStyle.fill;
@@ -268,13 +277,16 @@ class SleepingCharacterPainter extends CustomPainter {
       bodyPaint,
     );
 
-    // Zzz (efek tidur)
+    // Zzz efek
     final zzzPaint = Paint()
       ..color = Colors.white.withOpacity(0.6)
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(Offset(size.width / 2 + 30, size.height / 2 - 40), 3, zzzPaint);
-    canvas.drawCircle(Offset(size.width / 2 + 35, size.height / 2 - 35), 2, zzzPaint);
-    canvas.drawCircle(Offset(size.width / 2 + 40, size.height / 2 - 30), 1, zzzPaint);
+    canvas.drawCircle(
+        Offset(size.width / 2 + 30, size.height / 2 - 40), 3, zzzPaint);
+    canvas.drawCircle(
+        Offset(size.width / 2 + 35, size.height / 2 - 35), 2, zzzPaint);
+    canvas.drawCircle(
+        Offset(size.width / 2 + 40, size.height / 2 - 30), 1, zzzPaint);
   }
 
   @override

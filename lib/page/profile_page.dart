@@ -90,8 +90,6 @@ class ProfilePage extends StatelessWidget {
                       isEditProfile: true),
                   _buildButton(context, 'Keamanan & privasi', Icons.lock,
                       isSecurity: true),
-                  _buildButton(
-                      context, 'Peraturan notifikasi', Icons.notifications),
                   _buildButton(context, 'bahasa'.tr, Icons.language,
                       isLanguage: true),
                   _buildButton(context, 'Tentang Aplikasi'.tr, Icons.info,
@@ -113,7 +111,8 @@ class ProfilePage extends StatelessWidget {
           if (index == 0) {
             Get.to(() => const HomePage());
           } else if (index == 1) {
-            Get.to(() => const SleepClassificationPage()); // Ganti dengan halaman prediksi
+            Get.to(() =>
+                const SleepClassificationPage()); // Ganti dengan halaman prediksi
             // Tambahkan navigasi ke halaman prediksi jika ada
           }
         },
@@ -128,7 +127,7 @@ class ProfilePage extends StatelessWidget {
   }
 
   Widget _buildButton(BuildContext context, String title, IconData icon,
-     {bool isLogout = false,
+      {bool isLogout = false,
       bool isEditProfile = false,
       bool isSecurity = false,
       bool isLanguage = false,

@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
@@ -66,7 +65,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   hintText: "Masukkan email anda",
                   obscureText: false,
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 CustomTextField(
                   controller: passwordC,
                   icon: Icons.lock_outline,
@@ -131,61 +130,74 @@ class _LoginScreenState extends State<LoginScreen> {
 }
 
 bool checkEmail(String email) {
-  bool result = RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+  return RegExp(
+          r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
       .hasMatch(email);
-  return result;
 }
+
 Future<void> handleLogin(BuildContext context, TextEditingController emailC,
     TextEditingController passwordC) async {
   try {
     if (!checkEmail(emailC.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           backgroundColor: Colors.red,
           showCloseIcon: true,
-          content: Text('Email tidak valid')),
+          content: Text('Email tidak valid'),
+        ),
       );
       return;
     }
 
     var responses = await myhttp.post(
-      Uri.parse('http://127.0.0.1:5000/login'),
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      Uri.parse(
+          'http://localhost:5000/login'), // Sesuaikan IP jika di emulator/real device
+      headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'email': emailC.text,
         'password': passwordC.text,
       }),
     );
+
     if (!context.mounted) return;
 
     if (responses.statusCode == 200) {
       Map<String, dynamic> data = json.decode(responses.body);
+
       if (data['status'] == 'success') {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-              backgroundColor: Colors.green,
-              showCloseIcon: true,
-              content: Text('Login successful')),
+          const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text('Login berhasil!'),
+          ),
         );
+
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomePage()),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['message'])),
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(data['message'] ?? 'Login gagal'),
+          ),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Login failed')),
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Login gagal, silakan coba lagi'),
+        ),
       );
     }
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('An error occurred')),
+      const SnackBar(
+        backgroundColor: Colors.red,
+        content: Text('Terjadi kesalahan saat login'),
+      ),
     );
   }
 }
