@@ -18,19 +18,24 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
   // Form values
   String? _year;
   String? _gender;
+  String? _sleepDifficulty;
   String? _sleepHours;
-  String? _concentrationDifficulty;
+  String? _nightWake;
+  String? _sleepQuality;
+  String? _concentration;
+  String? _fatigue;
   String? _missClass;
+  String? _impactAssignment;
   String? _deviceUse;
   String? _caffeine;
   String? _exercise;
-  String? _stressLevel;
-  String? _academicPerformance;
+  String? _stress;
+  String? _performance;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this);
+    _tabController = TabController(length: 4, vsync: this);
   }
 
   @override
@@ -41,7 +46,7 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
   }
 
   void _nextPage() {
-    if (_pageController.page!.toInt() < 2) {
+    if (_pageController.page!.toInt() < 3) {
       _pageController.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -66,14 +71,19 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
     // Validasi semua field terisi
     if (_year == null ||
         _gender == null ||
+        _sleepDifficulty == null ||
         _sleepHours == null ||
-        _concentrationDifficulty == null ||
+        _nightWake == null ||
+        _sleepQuality == null ||
+        _concentration == null ||
+        _fatigue == null ||
         _missClass == null ||
+        _impactAssignment == null ||
         _deviceUse == null ||
         _caffeine == null ||
         _exercise == null ||
-        _stressLevel == null ||
-        _academicPerformance == null) {
+        _stress == null ||
+        _performance == null) {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
@@ -119,20 +129,24 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
       final request = {
         'year': _year,
         'gender': _gender,
+        'sleep_difficulty': _sleepDifficulty,
         'sleep_hours': _sleepHours,
-        'concentration_difficulty': _concentrationDifficulty,
+        'night_wake': _nightWake,
+        'sleep_quality': _sleepQuality,
+        'concentration': _concentration,
+        'fatigue': _fatigue,
         'miss_class': _missClass,
+        'impact_assignment': _impactAssignment,
         'device_use': _deviceUse,
         'caffeine': _caffeine,
         'exercise': _exercise,
-        'stress_level': _stressLevel,
-        'academic_performance': _academicPerformance,
+        'stress': _stress,
+        'performance': _performance,
       };
 
       // Panggil API
       final response = await http.post(
-        Uri.parse(
-            'http://127.0.0.1:5000/predict'), // Ganti dengan IP server Flask Anda
+        Uri.parse('http://127.0.0.1:5000/predict'),
         headers: {'Content-Type': 'application/json'},
         body: json.encode(request),
       );
@@ -336,6 +350,16 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
+                        Icon(Icons.bedtime_outlined, size: 18),
+                        SizedBox(width: 8),
+                        Text('Tidur'),
+                      ],
+                    ),
+                  ),
+                  Tab(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
                         Icon(Icons.psychology_outlined, size: 18),
                         SizedBox(width: 8),
                         Text('Kondisi'),
@@ -357,6 +381,7 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
         children: [
           _buildProfilePage(),
           _buildHabitsPage(),
+          _buildSleepPage(),
           _buildConditionsPage(),
         ],
       ),
@@ -391,6 +416,90 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             items: const ['Laki-laki', 'Perempuan'],
             onChanged: (val) => setState(() => _gender = val),
           ),
+          const SizedBox(height: 40),
+          _buildNavigationButtons(isFirstPage: true),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildHabitsPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionHeader('Kebiasaan Sehari-hari', Icons.nightlight_round),
+          const SizedBox(height: 16),
+          _buildDropdownField(
+            title: 'Penggunaan Perangkat Sebelum Tidur',
+            hint: 'Pilih frekuensi',
+            value: _deviceUse,
+            items: const [
+              'Tidak Pernah',
+              'Jarang',
+              'Kadang-kadang',
+              'Sering',
+              'Selalu'
+            ],
+            onChanged: (val) => setState(() => _deviceUse = val),
+          ),
+          const SizedBox(height: 16),
+          _buildDropdownField(
+            title: 'Konsumsi Kafein',
+            hint: 'Pilih frekuensi',
+            value: _caffeine,
+            items: const [
+              'Tidak pernah',
+              'Jarang (1-2 kali/minggu)',
+              'Kadang-kadang (3-4/minggu)',
+              'Sering (5-6 kali/minggu)',
+              'Setiap hari'
+            ],
+            onChanged: (val) => setState(() => _caffeine = val),
+          ),
+          const SizedBox(height: 16),
+          _buildDropdownField(
+            title: 'Aktivitas Olahraga',
+            hint: 'Pilih frekuensi',
+            value: _exercise,
+            items: const [
+              'Tidak pernah',
+              'Jarang (1-2 kali/minggu)',
+              'Kadang-kadang (3-4/minggu)',
+              'Sering (5-6 kali/minggu)',
+              'Setiap hari'
+            ],
+            onChanged: (val) => setState(() => _exercise = val),
+          ),
+          const SizedBox(height: 40),
+          _buildNavigationButtons(),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSleepPage() {
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionHeader('Kebiasaan Tidur', Icons.bedtime_outlined),
+          const SizedBox(height: 16),
+          _buildDropdownField(
+            title: 'Kesulitan Tidur',
+            hint: 'Pilih frekuensi',
+            value: _sleepDifficulty,
+            items: const [
+              'Tidak Pernah',
+              'Jarang',
+              'Kadang-kadang',
+              'Sering',
+              'Selalu'
+            ],
+            onChanged: (val) => setState(() => _sleepDifficulty = val),
+          ),
           const SizedBox(height: 16),
           _buildDropdownField(
             title: 'Lama Tidur (jam)',
@@ -407,66 +516,33 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             ],
             onChanged: (val) => setState(() => _sleepHours = val),
           ),
-          const SizedBox(height: 40),
-          _buildNavigationButtons(isFirstPage: true),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildHabitsPage() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildSectionHeader('Kebiasaan Tidur', Icons.nightlight_round),
           const SizedBox(height: 16),
           _buildDropdownField(
-            title: 'Penggunaan Perangkat Sebelum Tidur',
+            title: 'Terbangun di Malam Hari',
             hint: 'Pilih frekuensi',
-            value: _deviceUse,
+            value: _nightWake,
             items: const [
               'Tidak Pernah',
               'Jarang',
               'Kadang-kadang',
-              'Selalu',
               'Sering',
-              'Setiap malam'
+              'Selalu'
             ],
-            onChanged: (val) => setState(() => _deviceUse = val),
+            onChanged: (val) => setState(() => _nightWake = val),
           ),
           const SizedBox(height: 16),
           _buildDropdownField(
-            title: 'Konsumsi Kafein',
-            hint: 'Pilih jawaban',
-            value: _caffeine,
+            title: 'Kualitas Tidur',
+            hint: 'Pilih kualitas tidur',
+            value: _sleepQuality,
             items: const [
-              'Tidak pernah',
-              'Jarang (1-2 kali/minggu)',
-              'Kadang-kadang (3-4/minggu)',
-              'Sering (5-6 kali/minggu)',
-              'Setiap hari',
-              'Ya',
-              'Tidak'
+              'Sangat baik',
+              'Baik',
+              'Cukup',
+              'Buruk',
+              'Sangat buruk'
             ],
-            onChanged: (val) => setState(() => _caffeine = val),
-          ),
-          const SizedBox(height: 16),
-          _buildDropdownField(
-            title: 'Aktivitas Olahraga',
-            hint: 'Pilih jawaban',
-            value: _exercise,
-            items: const [
-              'Tidak pernah',
-              'Jarang (1-2 kali/minggu)',
-              'Kadang-kadang (3-4/minggu)',
-              'Sering (5-6 kali/minggu)',
-              'Setiap hari',
-              'Ya',
-              'Tidak'
-            ],
-            onChanged: (val) => setState(() => _exercise = val),
+            onChanged: (val) => setState(() => _sleepQuality = val),
           ),
           const SizedBox(height: 40),
           _buildNavigationButtons(),
@@ -486,7 +562,7 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
           _buildDropdownField(
             title: 'Kesulitan Konsentrasi',
             hint: 'Pilih frekuensi',
-            value: _concentrationDifficulty,
+            value: _concentration,
             items: const [
               'Tidak Pernah',
               'Jarang',
@@ -494,7 +570,21 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
               'Sering',
               'Selalu'
             ],
-            onChanged: (val) => setState(() => _concentrationDifficulty = val),
+            onChanged: (val) => setState(() => _concentration = val),
+          ),
+          const SizedBox(height: 16),
+          _buildDropdownField(
+            title: 'Kelelahan',
+            hint: 'Pilih frekuensi',
+            value: _fatigue,
+            items: const [
+              'Tidak Pernah',
+              'Jarang',
+              'Kadang-kadang',
+              'Sering',
+              'Selalu'
+            ],
+            onChanged: (val) => setState(() => _fatigue = val),
           ),
           const SizedBox(height: 16),
           _buildDropdownField(
@@ -511,9 +601,23 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
           ),
           const SizedBox(height: 16),
           _buildDropdownField(
+            title: 'Dampak pada Tugas',
+            hint: 'Pilih tingkat dampak',
+            value: _impactAssignment,
+            items: const [
+              'Tidak berpengaruh',
+              'Sedikit berpengaruh',
+              'Cukup berpengaruh',
+              'Sangat berpengaruh',
+              'Berdampak parah'
+            ],
+            onChanged: (val) => setState(() => _impactAssignment = val),
+          ),
+          const SizedBox(height: 16),
+          _buildDropdownField(
             title: 'Tingkat Stres',
             hint: 'Pilih tingkat stres',
-            value: _stressLevel,
+            value: _stress,
             items: const [
               'Tidak Stress',
               'Stress rendah',
@@ -522,13 +626,13 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
               'Sangat tinggi',
               'Esktrem'
             ],
-            onChanged: (val) => setState(() => _stressLevel = val),
+            onChanged: (val) => setState(() => _stress = val),
           ),
           const SizedBox(height: 16),
           _buildDropdownField(
             title: 'Performa Akademik',
             hint: 'Pilih performa',
-            value: _academicPerformance,
+            value: _performance,
             items: const [
               'Sangat baik',
               'Baik',
@@ -536,7 +640,7 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
               'Dibawah rata-rata',
               'Buruk'
             ],
-            onChanged: (val) => setState(() => _academicPerformance = val),
+            onChanged: (val) => setState(() => _performance = val),
           ),
           const SizedBox(height: 40),
           _buildNavigationButtons(isLastPage: true),
