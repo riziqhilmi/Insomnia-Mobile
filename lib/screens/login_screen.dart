@@ -6,6 +6,7 @@ import 'register_screen.dart';
 import '../page/home_page.dart';
 import 'forgot_password.dart';
 import 'package:http/http.dart' as myhttp;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -150,8 +151,7 @@ Future<void> handleLogin(BuildContext context, TextEditingController emailC,
     }
 
     var responses = await myhttp.post(
-      Uri.parse(
-          'http://localhost:5000/login'), // Sesuaikan IP jika di emulator/real device
+      Uri.parse('http://localhost:5000/login'), // Ganti ke IP jika pakai device
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'email': emailC.text,
@@ -165,6 +165,11 @@ Future<void> handleLogin(BuildContext context, TextEditingController emailC,
       Map<String, dynamic> data = json.decode(responses.body);
 
       if (data['status'] == 'success') {
+        final prefs = await SharedPreferences.getInstance();
+        final int userId = data['user']['id'];
+        await prefs.setInt('user_id', userId);
+        print('User ID disimpan: $userId'); // Untuk debug
+
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.green,
@@ -199,5 +204,6 @@ Future<void> handleLogin(BuildContext context, TextEditingController emailC,
         content: Text('Terjadi kesalahan saat login'),
       ),
     );
+    print('Login error: $e'); // Debug error
   }
 }

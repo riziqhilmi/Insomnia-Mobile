@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
 class SleepClassificationPage extends StatefulWidget {
@@ -125,8 +126,44 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
     );
 
     try {
+
+    final prefs = await SharedPreferences.getInstance();
+  final int? userId = prefs.getInt('user_id'); // pastikan key ini sama saat simpan
+
+  if (userId == null) {
+    Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E2746),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: const Text(
+          'User Tidak Ditemukan',
+          style: TextStyle(color: Colors.white),
+        ),
+        content: const Text(
+          'User ID tidak ditemukan, silakan login ulang.',
+          style: TextStyle(color: Colors.white70),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'OK',
+              style: TextStyle(color: Colors.deepPurple),
+            ),
+          ),
+        ],
+      ),
+    );
+    return;
+  }
+
       // Buat request object
       final request = {
+        'user_id': userId,
         'year': _year,
         'gender': _gender,
         'sleep_difficulty': _sleepDifficulty,
