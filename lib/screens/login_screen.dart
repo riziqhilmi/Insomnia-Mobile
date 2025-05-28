@@ -151,7 +151,7 @@ Future<void> handleLogin(BuildContext context, TextEditingController emailC,
     }
 
     var responses = await myhttp.post(
-      Uri.parse('http://localhost:5000/login'), // Ganti ke IP jika pakai device
+      Uri.parse('http://localhost:5000/login'), 
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'email': emailC.text,
