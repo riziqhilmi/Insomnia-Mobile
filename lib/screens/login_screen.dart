@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import 'register_screen.dart';
@@ -46,13 +47,13 @@ class _LoginScreenState extends State<LoginScreen> {
                 const SizedBox(height: 50),
                 const Icon(Icons.nights_stay, size: 72, color: Colors.white),
                 const SizedBox(height: 16),
-                const Text(
-                  "Selamat datang kembali",
+                 Text(
+                  "selamat datang kembali".tr,
                   style: TextStyle(color: Colors.white70, fontSize: 16),
                 ),
                 const SizedBox(height: 4),
-                const Text(
-                  "Sign In",
+                Text(
+                  "masuk ke akun anda".tr,
                   style: TextStyle(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -63,14 +64,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomTextField(
                   controller: emailC,
                   icon: Icons.email_outlined,
-                  hintText: "Masukkan email anda",
+                  hintText: "masukkan email anda".tr,
                   obscureText: false,
                 ),
                 const SizedBox(height: 20),
                 CustomTextField(
                   controller: passwordC,
                   icon: Icons.lock_outline,
-                  hintText: "Masukkan password anda",
+                  hintText: "masukkan kata sandi anda".tr,
                   obscureText: true,
                 ),
                 const SizedBox(height: 10),
@@ -82,14 +83,14 @@ class _LoginScreenState extends State<LoginScreen> {
                           builder: (context) => ForgotPasswordScreen()),
                     );
                   },
-                  child: const Text(
-                    "Lupa Password?",
+                  child:  Text(
+                    "lupa kata sandi?".tr,
                     style: TextStyle(color: Colors.grey),
                   ),
                 ),
                 const SizedBox(height: 20),
                 CustomButton(
-                  text: "Masuk",
+                  text: "masuk".tr,
                   onPressed: () {
                     handleLogin(context, emailC, passwordC);
                   },
@@ -98,8 +99,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    const Text(
-                      "Belum punya akun? ",
+                     Text(
+                      "belum punya akun?".tr,
                       style: TextStyle(color: Colors.white),
                     ),
                     TextButton(
@@ -111,8 +112,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         );
                       },
-                      child: const Text(
-                        "Daftar",
+                      child:  Text(
+                        "daftar".tr,
                         style: TextStyle(
                           color: Colors.cyanAccent,
                           fontWeight: FontWeight.bold,
@@ -141,10 +142,10 @@ Future<void> handleLogin(BuildContext context, TextEditingController emailC,
   try {
     if (!checkEmail(emailC.text)) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           backgroundColor: Colors.red,
           showCloseIcon: true,
-          content: Text('Email tidak valid'),
+          content: Text('email tidak valid'.tr),
         ),
       );
       return;
@@ -171,9 +172,9 @@ Future<void> handleLogin(BuildContext context, TextEditingController emailC,
         print('User ID disimpan: $userId'); // Untuk debug
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             backgroundColor: Colors.green,
-            content: Text('Login berhasil!'),
+            content: Text('login berhasil!'.tr),
           ),
         );
 
@@ -185,23 +186,23 @@ Future<void> handleLogin(BuildContext context, TextEditingController emailC,
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             backgroundColor: Colors.red,
-            content: Text(data['message'] ?? 'Login gagal'),
+            content: Text(data['message'] ?? 'login gagal'.tr),
           ),
         );
       }
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+         SnackBar(
           backgroundColor: Colors.red,
-          content: Text('Login gagal, silakan coba lagi'),
+          content: Text('login gagal, silakan coba lagi'.tr),
         ),
       );
     }
   } catch (e) {
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
+      SnackBar(
         backgroundColor: Colors.red,
-        content: Text('Terjadi kesalahan saat login'),
+        content: Text('terjadi kesalahan saat login'.tr),
       ),
     );
     print('Login error: $e'); // Debug error

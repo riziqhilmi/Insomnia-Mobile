@@ -35,6 +35,16 @@ class LocalizationService extends Translations {
           "daftar": "Register",
           "sudah punya akun?": "Already have an account?",
           "masuk": "Login",
+          "selama datang kembali": "Welcome back",
+          "masuk ke akun Anda": "Login to your account",
+          "masukkan email anda": "Enter your email address",
+          "masukkan kata sandi anda": "Enter your password",
+          "lupa kata sandi?": "Forgot Password?",
+          "belum punya akun?": "Don't have an account yet?",
+          "login berhasil!": "Login Successful!",
+          "login gagal": "Login Failed",
+          "login gagal, silakan coba lagi": "Login failed, please try again",
+          "terjadi kesalahan saat login'": "An error occurred while logging in",
          
 
 
@@ -84,6 +94,16 @@ class LocalizationService extends Translations {
           "daftar": "Daftar",
           "sudah punya akun?": "Sudah punya akun?",
           "masuk": "Masuk",
+          "selamat datang kembali": "Selamat datang kembali",
+          "masuk ke akun Anda": "Masuk ke akun Anda",
+          "masukkan email anda": "Masukkan email Anda",
+          "masukkan kata sandi anda": "Masukkan kata sandi Anda",
+          "lupa kata sandi?": "Lupa Kata Sandi?",
+          "belum punya akun?": "Belum punya akun?",
+          "login berhasil!": "Login Berhasil!",
+          "login gagal": "Login Gagal",
+          "login gagal, silakan coba lagi": "Login gagal, silakan coba lagi",
+          "terjadi kesalahan saat login": "Terjadi kesalahan saat login",
 
 
 
