@@ -5,10 +5,44 @@ class LocalizationService extends Translations {
   Map<String, Map<String, String>> get keys => {
         'en_US': {
           "mulai": "Start",
-          
           "tentang aplikasi": "About Application",
           "hello": "Hello US",
-          "laporan_terbaru": "Latest Report",
+          "buat akun baru": "Create New Account",
+          "berhasil": "Successfully",
+          "registrasi berhasil!": "Registration Successful!",
+          "registrasi gagal coba lagi.": "Registration failed, please try again.",
+          "terjadi kesalahan saat menghubungi server.": "An error occurred while contacting the server.",
+          "gagal": "Failed",
+          "mendaftar": "Register",
+          "nama lengkap": "Full Name",
+          "nama tidak boleh kosong": "Name cannot be empty",
+          "nama belakang": "Last Name",
+          "nama belakang tidak boleh kosong": "Last name cannot be empty",
+          "jenis Kelamin": "Gender",
+          "pilih jenis kelamin":"select gender",
+          "laki laki":"male",
+          "perempuan":"female",
+          "tanggal lahir": "Date of Birth",
+          "tanggal lahir wajib diisi": "Date of birth is required",
+          "nomor telepon": "Phone Number",
+          "telepon wajib diisi": "Phone number is required",
+          "email": "Email",
+          "email tidak valid": "Invalid email address",
+          "kata sandi": "Password",
+          "minimal 6 karakter": "Minimum 6 characters",
+          "konfirmasi kata sandi": "Confirm Password",
+          "kata sandi tidak cocok": "Passwords do not match",
+          "daftar": "Register",
+          "sudah punya akun?": "Already have an account?",
+          "masuk": "Login",
+         
+
+
+
+
+
+
+
           "bahasa": "Languages",
           "pengaturan": "Settings",
           "pilih_bahasa": "Choose Languages",
@@ -22,7 +56,48 @@ class LocalizationService extends Translations {
         'id_ID': {
           "mulai": "Mulai",
           "hello": "Hello ID",
-          "laporan_terbaru": "Laporan Terbaru",
+          "buat akun baru": "Buat Akun Baru",
+          "berhasil": "Berhasil",
+          "registrasi berhasil!": "Registrasi Berhasil!",
+          "registrasi gagal coba lagi.": "Registrasi gagal, silakan coba lagi.",
+          "terjadi kesalahan saat menghubungi server.": "Terjadi kesalahan saat menghubungi server.",
+          "gagal": "Gagal",
+          "mendaftar": "Daftar",
+          "nama lengkap": "Nama Lengkap",
+          "nama tidak boleh kosong": "Nama tidak boleh kosong",
+          "nama belakang": "Nama Belakang",
+          "nama belakang tidak boleh kosong": "Nama belakang tidak boleh kosong",
+          "jenis Kelamin": "Jenis Kelamin",
+          "pilih jenis kelamin": "Pilih Jenis Kelamin",
+          "laki-laki": "Laki-laki",
+          "perempuan": "Perempuan",
+          "tanggal lahir": "Tanggal Lahir",
+          "tanggal lahir wajib diisi": "Tanggal lahir wajib diisi",
+          "nomor telepon": "Nomor Telepon",
+          "telepon wajib diisi": "Nomor telepon wajib diisi",
+          "email": "Email",
+          "email tidak valid": "Email tidak valid",
+          "kata sandi": "Kata Sandi",
+          "minimal 6 karakter": "Minimal 6 karakter",
+          "konfirmasi kata sandi": "Konfirmasi Kata Sandi",
+          "kata sandi tidak cocok": "Kata sandi tidak cocok",
+          "daftar": "Daftar",
+          "sudah punya akun?": "Sudah punya akun?",
+          "masuk": "Masuk",
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           "bahasa": "Bahasa",
           "pengaturan": "Pengaturan",
           "pilih_bahasa": "Pilih Bahasa",

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:animated_background/animated_background.dart';
 import 'package:insomnia_app/screens/login_screen.dart';
@@ -13,7 +14,7 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen>
-    with TickerProviderStateMixin {
+  with TickerProviderStateMixin {
   final _formKey = GlobalKey<FormState>();
   final namaDepanC = TextEditingController();
   final usernameC = TextEditingController();
@@ -71,9 +72,8 @@ class _RegisterScreenState extends State<RegisterScreen>
           context: context,
           builder: (_) => AlertDialog(
             backgroundColor: const Color(0xFF0B0F2F),
-            title:
-                const Text("Berhasil", style: TextStyle(color: Colors.white)),
-            content: Text(data['message'] ?? "Registrasi berhasil!",
+            title:Text("berhasil".tr, style: TextStyle(color: Colors.white)),
+            content: Text(data['message'] ?? "registrasi berhasil!".tr,
                 style: const TextStyle(color: Colors.white70)),
             actions: [
               TextButton(
@@ -91,10 +91,10 @@ class _RegisterScreenState extends State<RegisterScreen>
           ),
         );
       } else {
-        _showError(data['message'] ?? "Registrasi gagal. Coba lagi.");
+        _showError(data['message'] ?? "registrasi gagal coba lagi.".tr);
       }
     } catch (e) {
-      _showError("Terjadi kesalahan saat menghubungi server.");
+      _showError("terjadi kesalahan saat menghubungi server.".tr);
     }
   }
 
@@ -103,7 +103,7 @@ class _RegisterScreenState extends State<RegisterScreen>
       context: context,
       builder: (_) => AlertDialog(
         backgroundColor: const Color(0xFF0B0F2F),
-        title: const Text("Gagal", style: TextStyle(color: Colors.white)),
+        title:  Text("gagal".tr, style: TextStyle(color: Colors.white)),
         content: Text(message, style: const TextStyle(color: Colors.white70)),
         actions: [
           TextButton(
@@ -189,10 +189,10 @@ class _RegisterScreenState extends State<RegisterScreen>
                         const Icon(Icons.person_add_alt_1_rounded,
                             size: 72, color: Colors.white),
                         const SizedBox(height: 12),
-                        const Text("Buat Akun Baru",
+                        Text("buat akun baru".tr,
                             style:
                                 TextStyle(fontSize: 16, color: Colors.white60)),
-                        const Text("Sign Up",
+                        Text("mendaftar".tr,
                             style: TextStyle(
                                 fontSize: 32,
                                 fontWeight: FontWeight.bold,
@@ -201,83 +201,84 @@ class _RegisterScreenState extends State<RegisterScreen>
                         _buildInput(
                             controller: namaDepanC,
                             icon: Icons.person_outline,
-                            hint: "Nama Lengkap",
+                            hint: "nama lengkap".tr,
                             validator: (val) => val!.isEmpty
-                                ? 'Nama tidak boleh kosong'
+                                ? 'nama tidak boleh kosong'.tr
                                 : null),
                         const SizedBox(height: 20),
                         _buildInput(
                             controller: usernameC,
                             icon: Icons.person_outline,
-                            hint: "Username",
+                            hint: "nama belakang".tr,
                             validator: (val) => val!.isEmpty
-                                ? 'Username tidak boleh kosong'
+                                ? 'nama belakang tidak boleh kosong'.tr
                                 : null),
                         const SizedBox(height: 20),
                         _buildInput(
                             controller: null,
                             icon: Icons.person_outline,
-                            hint: "Jenis Kelamin",
+                            hint: "jenis Kelamin".tr
+                            ,
                             validator: (val) =>
-                                val == null ? 'Pilih jenis kelamin' : null,
-                            dropdownItems: const [
+                                val == null ? 'pilih jenis kelamin'.tr: null,
+                            dropdownItems:  [
                               DropdownMenuItem(
-                                  value: "Laki-laki", child: Text("Laki-laki")),
+                                  value: "laki-laki".tr, child: Text("laki laki".tr)),
                               DropdownMenuItem(
-                                  value: "Perempuan", child: Text("Perempuan")),
+                                  value: "perempuan".tr, child: Text("perempuan".tr)),
                             ]),
                         const SizedBox(height: 20),
                         _buildInput(
                             controller: _birthDateController,
                             icon: Icons.calendar_today,
-                            hint: "Tanggal Lahir",
+                            hint: "tanggal lahir".tr,
                             isDatePicker: true,
                             validator: (val) => val!.isEmpty
-                                ? 'Tanggal lahir wajib diisi'
+                                ? 'tanggal lahir wajib diisi'.tr
                                 : null),
                         const SizedBox(height: 20),
                         _buildInput(
                             controller: _phoneController,
                             icon: Icons.phone,
-                            hint: "Nomor Telepon",
+                            hint: "nomor telepon".tr,
                             validator: (val) =>
-                                val!.isEmpty ? 'Telepon wajib diisi' : null),
+                                val!.isEmpty ? 'telepon wajib diisi'.tr : null),
                         const SizedBox(height: 20),
                         _buildInput(
                             controller: _emailController,
                             icon: Icons.email_outlined,
-                            hint: "Email",
+                            hint: "email".tr,
                             validator: (val) => val!.contains("@")
                                 ? null
-                                : 'Email tidak valid'),
+                                : 'email tidak valid'.tr),
                         const SizedBox(height: 20),
                         _buildInput(
                             controller: _passwordController,
                             icon: Icons.lock_outline,
-                            hint: "Password",
+                            hint: "kata sandi".tr,
                             obscure: !_isPasswordVisible,
                             suffix: _visibilityIcon(_isPasswordVisible, () {
                               setState(() =>
                                   _isPasswordVisible = !_isPasswordVisible);
                             }),
                             validator: (val) =>
-                                val!.length < 6 ? 'Minimal 6 karakter' : null),
+                                val!.length < 6 ? 'minimal 6 karakter'.tr : null),
                         const SizedBox(height: 20),
                         _buildInput(
                             controller: _confirmPasswordController,
                             icon: Icons.lock_outline,
-                            hint: "Konfirmasi Password",
+                            hint: "konfirmasi kata sandi".tr,
                             obscure: !_isConfirmVisible,
                             suffix: _visibilityIcon(_isConfirmVisible, () {
                               setState(
                                   () => _isConfirmVisible = !_isConfirmVisible);
                             }),
                             validator: (val) => val != _passwordController.text
-                                ? 'Password tidak cocok'
+                                ? 'kata sandi tidak cocok'.tr
                                 : null),
                         const SizedBox(height: 30),
                         CustomButton(
-                          text: "Daftar",
+                          text: "daftar".tr,
                           onPressed: _handleRegister,
                           gradient: const LinearGradient(
                               colors: [Colors.cyan, Colors.blueAccent]),
@@ -286,11 +287,11 @@ class _RegisterScreenState extends State<RegisterScreen>
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Text("Sudah punya akun? ",
+                            Text("sudah punya akun?".tr,
                                 style: TextStyle(color: Colors.white)),
                             TextButton(
                               onPressed: () => Navigator.pop(context),
-                              child: const Text("Masuk",
+                              child:  Text("masuk".tr,
                                   style: TextStyle(
                                       color: Colors.cyanAccent,
                                       fontWeight: FontWeight.bold)),
