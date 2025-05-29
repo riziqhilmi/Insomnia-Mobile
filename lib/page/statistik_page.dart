@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:collection/collection.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class StatistikPage extends StatefulWidget {
   const StatistikPage({Key? key}) : super(key: key);
@@ -28,7 +30,7 @@ class _StatistikPageState extends State<StatistikPage> {
   Future<void> _loadUserData() async {
     final prefs = await SharedPreferences.getInstance();
     final loadedUserId = prefs.getInt('user_id');
-    
+
     if (loadedUserId != null) {
       setState(() {
         userId = loadedUserId;
@@ -38,57 +40,44 @@ class _StatistikPageState extends State<StatistikPage> {
   }
 
   Future<void> _loadUserPredictions() async {
-    // Simulasi pengambilan data - dalam implementasi nyata ganti dengan API call
-    final allPredictions = await _fetchAllPredictions();
-    
-    setState(() {
-      userPredictions = allPredictions.where((pred) => pred['user_id'] == userId).toList();
-      isLoading = false;
-    });
-  }
+    if (userId == null) return;
 
-  // Fungsi simulasi pengambilan data
-  Future<List<dynamic>> _fetchAllPredictions() async {
-    // Contoh data - ganti dengan API call ke backend Anda
-    return [
-      {
-        "_id": {"\$oid": "6835fccdc51aba12ac57383f"},
-        "user_id": 9,
-        "input": {
-          "sleep_hours": "4-5 jam",
-          "sleep_quality": "Cukup",
-          "stress": "Stress tinggi"
-        },
-        "mapped_input": {
-          "sleep_hours": "4-5 hours",
-          "sleep_quality": "Average",
-          "stress": "High stress",
-          "device_use": "Rarely (1-2 times a week)"
-        },
-        "prediction": 1,
-        "result": "Insomnia ringan",
-        "timestamp": {"\$date": "2025-05-27T17:56:29.841Z"}
-      },
-      {
-        "_id": {"\$oid": "68366254d2ecb7e24fffb02e"},
-        "user_id": 9,
-        "input": {
-          "sleep_hours": "Kurang dari 4 jam",
-          "sleep_quality": "Cukup",
-          "stress": "Stress sedang"
-        },
-        "mapped_input": {
-          "sleep_hours": "Less than 4 hours",
-          "sleep_quality": "Average",
-          "stress": "Moderate",
-          "device_use": "Often (5-6 times a week)"
-        },
-        "prediction": 0,
-        "result": "Tidak ada insomnia",
-        "timestamp": {"\$date": "2025-05-28T01:09:40.603Z"}
-      },
-      // Tambahkan data lain sesuai kebutuhan
-    ];
+    setState(() {
+      isLoading = true;
+    });
+
+    try {
+      final response = await http.get(
+        Uri.parse('http://127.0.0.1:5000/api/user_predictions/$userId'),
+        headers: {'Content-Type': 'application/json'},
+      );
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        if (data['success']) {
+          setState(() {
+            userPredictions = data['data'];
+            isLoading = false;
+          });
+          return;
+        }
+      }
+
+      // Jika terjadi error
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Gagal memuat data: ${response.statusCode}')),
+      );
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: $e')),
+      );
+    }
   }
 
   @override
@@ -120,85 +109,107 @@ class _StatistikPageState extends State<StatistikPage> {
           ],
         ),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header section
-            Container(
-              width: double.infinity,
-              padding: const EdgeInsets.only(
-                  top: 20, bottom: 30, left: 20, right: 20),
-              decoration: BoxDecoration(
-                color: primaryColor,
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(30),
-                  bottomRight: Radius.circular(30),
+      body: RefreshIndicator(
+        onRefresh: _loadUserPredictions,
+        child: SingleChildScrollView(
+          physics: const AlwaysScrollableScrollPhysics(),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                width: double.infinity,
+                padding: const EdgeInsets.only(
+                    top: 20, bottom: 30, left: 20, right: 20),
+                decoration: BoxDecoration(
+                  color: primaryColor,
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 10,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 10,
-                    offset: const Offset(0, 5),
-                  ),
-                ],
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Statistik Tidur',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Montserrat',
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    const Text(
+                      'Pantau pola tidur Anda',
+                      style: TextStyle(
+                        color: Colors.white70,
+                        fontSize: 16,
+                        fontFamily: 'Montserrat',
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildQuickStat(
+                          _calculateAverageSleepHours().toStringAsFixed(1),
+                          'Jam',
+                          Icons.access_time,
+                        ),
+                        _buildQuickStat(
+                          '${_calculateInsomniaPercentage().round()}%',
+                          'Insomnia',
+                          Icons.nightlight_round,
+                        ),
+                        _buildQuickStat(
+                          _getMostCommonWakeTime(),
+                          'Bangun',
+                          Icons.wb_twighlight,
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Statistik Tidur',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      fontFamily: 'Montserrat',
+              const SizedBox(height: 16),
+              if (userPredictions.isNotEmpty) ...[
+                _buildUserInsomniaSummary(),
+                _buildUserInsomniaTimeline(),
+                _buildUserSleepPatterns(),
+                _buildUserRiskFactors(),
+              ] else
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        Icon(Icons.nightlight_round,
+                            size: 50, color: Colors.grey),
+                        const SizedBox(height: 16),
+                        const Text(
+                          'Belum ada data prediksi',
+                          style: TextStyle(fontSize: 18, color: Colors.grey),
+                        ),
+                        const SizedBox(height: 8),
+                        const Text(
+                          'Lakukan prediksi insomnia terlebih dahulu',
+                          style: TextStyle(color: Colors.grey),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  const Text(
-                    'Pantau pola tidur Anda',
-                    style: TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                      fontFamily: 'Montserrat',
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      _buildQuickStat(
-                        _calculateAverageSleepHours().toStringAsFixed(1),
-                        'Jam',
-                        Icons.access_time,
-                      ),
-                      _buildQuickStat(
-                        '${_calculateInsomniaPercentage().round()}%',
-                        'Insomnia',
-                        Icons.nightlight_round,
-                      ),
-                      _buildQuickStat(
-                        _getMostCommonWakeTime(),
-                        'Bangun',
-                        Icons.wb_twighlight,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 16),
-
-            // Visualisasi personal user
-            _buildUserInsomniaSummary(),
-            _buildUserInsomniaTimeline(),
-            _buildUserSleepPatterns(),
-            _buildUserRiskFactors(),
-            
-            const SizedBox(height: 24),
-          ],
+                ),
+              const SizedBox(height: 24),
+            ],
+          ),
         ),
       ),
     );
@@ -207,35 +218,46 @@ class _StatistikPageState extends State<StatistikPage> {
   // Fungsi helper untuk statistik header
   double _calculateAverageSleepHours() {
     if (userPredictions.isEmpty) return 0;
-    
+
     double total = 0;
     for (var pred in userPredictions) {
       final hours = pred['mapped_input']['sleep_hours'];
-      if (hours == 'Less than 4 hours') total += 3.5;
-      else if (hours == '4-5 hours') total += 4.5;
-      else if (hours == '6-7 hours') total += 6.5;
-      else total += 7.5;
+      if (hours == 'Less than 4 hours')
+        total += 3.5;
+      else if (hours == '4-5 hours')
+        total += 4.5;
+      else if (hours == '6-7 hours')
+        total += 6.5;
+      else
+        total += 7.5;
     }
     return total / userPredictions.length;
   }
 
   double _calculateInsomniaPercentage() {
     if (userPredictions.isEmpty) return 0;
-    final insomniaCases = userPredictions.where((d) => d['prediction'] == 1).length;
+    final insomniaCases =
+        userPredictions.where((d) => d['prediction'] == 1).length;
     return (insomniaCases / userPredictions.length) * 100;
   }
 
   String _getMostCommonWakeTime() {
     if (userPredictions.isEmpty) return '-';
-    
-    final wakeTimes = groupBy(userPredictions, (d) => d['mapped_input']['night_wake']);
-    final mostCommon = wakeTimes.entries.reduce((a, b) => a.value.length > b.value.length ? a : b);
-    
+
+    final wakeTimes =
+        groupBy(userPredictions, (d) => d['mapped_input']['night_wake']);
+    final mostCommon = wakeTimes.entries
+        .reduce((a, b) => a.value.length > b.value.length ? a : b);
+
     switch (mostCommon.key) {
-      case 'Every night': return 'Sering';
-      case 'Sometimes (3-4 times a week)': return 'Kadang';
-      case 'Rarely (1-2 times a week)': return 'Jarang';
-      default: return '-';
+      case 'Every night':
+        return 'Sering';
+      case 'Sometimes (3-4 times a week)':
+        return 'Kadang';
+      case 'Rarely (1-2 times a week)':
+        return 'Jarang';
+      default:
+        return '-';
     }
   }
 
@@ -278,8 +300,11 @@ class _StatistikPageState extends State<StatistikPage> {
   // Visualisasi personal user
   Widget _buildUserInsomniaSummary() {
     final totalPredictions = userPredictions.length;
-    final insomniaCases = userPredictions.where((d) => d['prediction'] == 1).length;
-    final percentage = totalPredictions == 0 ? 0 : (insomniaCases / totalPredictions * 100).round();
+    final insomniaCases =
+        userPredictions.where((d) => d['prediction'] == 1).length;
+    final percentage = totalPredictions == 0
+        ? 0
+        : (insomniaCases / totalPredictions * 100).round();
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -360,7 +385,8 @@ class _StatistikPageState extends State<StatistikPage> {
     );
   }
 
-  Widget _buildUserStatCard(String title, String value, IconData icon, Color color) {
+  Widget _buildUserStatCard(
+      String title, String value, IconData icon, Color color) {
     return Column(
       children: [
         Container(
@@ -393,7 +419,7 @@ class _StatistikPageState extends State<StatistikPage> {
 
   Widget _buildUserInsomniaTimeline() {
     final predictionsByDate = groupBy(userPredictions, (pred) {
-      final date = DateTime.parse(pred['timestamp']['\$date']);
+      final date = DateTime.parse(pred['timestamp']);
       return '${date.day}/${date.month}';
     });
 
@@ -435,12 +461,15 @@ class _StatistikPageState extends State<StatistikPage> {
                 lineBarsData: [
                   LineChartBarData(
                     spots: dates.asMap().entries.map((entry) {
-                      return FlSpot(entry.key.toDouble(), insomniaCounts[entry.key].toDouble());
+                      return FlSpot(entry.key.toDouble(),
+                          insomniaCounts[entry.key].toDouble());
                     }).toList(),
                     isCurved: true,
                     color: const Color(0xFFFF6B6B),
                     barWidth: 4,
-                    belowBarData: BarAreaData(show: true, color: const Color(0xFFFF6B6B).withOpacity(0.3)),
+                    belowBarData: BarAreaData(
+                        show: true,
+                        color: const Color(0xFFFF6B6B).withOpacity(0.3)),
                     dotData: FlDotData(show: true),
                   ),
                 ],
@@ -479,8 +508,9 @@ class _StatistikPageState extends State<StatistikPage> {
   }
 
   Widget _buildUserSleepPatterns() {
-    final insomniaPredictions = userPredictions.where((p) => p['prediction'] == 1).toList();
-    
+    final insomniaPredictions =
+        userPredictions.where((p) => p['prediction'] == 1).toList();
+
     final sleepHoursData = insomniaPredictions.map((p) {
       final hours = p['mapped_input']['sleep_hours'];
       if (hours == 'Less than 4 hours') return 3.5;
@@ -559,11 +589,18 @@ class _StatistikPageState extends State<StatistikPage> {
   }
 
   Widget _buildUserRiskFactors() {
-    final insomniaPredictions = userPredictions.where((p) => p['prediction'] == 1).toList();
-    
-    int highStress = insomniaPredictions.where((p) => p['mapped_input']['stress'] == 'High stress').length;
-    int poorSleepQuality = insomniaPredictions.where((p) => p['mapped_input']['sleep_quality'] == 'Poor').length;
-    int deviceUsage = insomniaPredictions.where((p) => p['mapped_input']['device_use'].contains('Often')).length;
+    final insomniaPredictions =
+        userPredictions.where((p) => p['prediction'] == 1).toList();
+
+    int highStress = insomniaPredictions
+        .where((p) => p['mapped_input']['stress'] == 'High stress')
+        .length;
+    int poorSleepQuality = insomniaPredictions
+        .where((p) => p['mapped_input']['sleep_quality'] == 'Poor')
+        .length;
+    int deviceUsage = insomniaPredictions
+        .where((p) => p['mapped_input']['device_use'].contains('Often'))
+        .length;
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -617,9 +654,10 @@ class _StatistikPageState extends State<StatistikPage> {
     );
   }
 
-  Widget _buildRiskFactorItem(String title, int count, int total, IconData icon, Color color) {
+  Widget _buildRiskFactorItem(
+      String title, int count, int total, IconData icon, Color color) {
     final percentage = total == 0 ? 0 : (count / total * 100).round();
-    
+
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8),
       child: Row(
