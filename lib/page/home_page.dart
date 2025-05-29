@@ -44,11 +44,11 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 30),
-                    const Center(
+                    Center(
                       child: Column(
                         children: [
                           Text(
-                            'Selamat Datang 🌙',
+                            'selamat Datang 🌙'.tr,
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 24,
@@ -57,7 +57,7 @@ class HomePage extends StatelessWidget {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'Tidurlah malam ini untuk hari esok yang lebih baik.',
+                            'tidurlah malam ini untuk hari esok yang lebih baik.'.tr,
                             style: TextStyle(
                               color: Colors.white70,
                               fontSize: 16,
@@ -105,7 +105,7 @@ class HomePage extends StatelessWidget {
                     children: [
                       FeatureButton(
                         icon: Icons.bar_chart,
-                        label: 'Statistik',
+                        label: 'statistik'.tr,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -117,7 +117,7 @@ class HomePage extends StatelessWidget {
                       ),
                       FeatureButton(
                         icon: Icons.menu_book,
-                        label: 'Edukasi',
+                        label: 'edukasi'.tr,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -131,12 +131,12 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 30),
                   SleepButton(
-                    text: 'Berita terkini tentang tidur',
+                    text: 'berita terkini tentang tidur'.tr,
                     onPressed: () {
                       // Arahkan ke halaman berita jika sudah tersedia
                       Get.snackbar(
-                        'Info',
-                        'Fitur berita masih dalam pengembangan.',
+                        'info'.tr,
+                        'fitur berita masih dalam pengembangan.'.tr,
                         snackPosition: SnackPosition.BOTTOM,
                         backgroundColor: Colors.deepPurple,
                         colorText: Colors.white,
@@ -145,7 +145,7 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   SleepButton(
-                    text: 'Tips tidur Sehat',
+                    text: 'tips tidur Sehat'.tr,
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -179,11 +179,11 @@ class HomePage extends StatelessWidget {
             );
           }
         },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+        items:  [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'beranda'.tr),
           BottomNavigationBarItem(
-              icon: Icon(Icons.analytics), label: 'Prediksi'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Saya'),
+              icon: Icon(Icons.analytics), label: 'prediksi'.tr),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'saya'.tr),
         ],
       ),
     );
