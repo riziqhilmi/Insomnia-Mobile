@@ -240,11 +240,11 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
         resultColor = Colors.green;
         break;
       case 1:
-        resultText = 'Insomnia ringan';
+        resultText = 'Risiko Insomnia';
         resultColor = Colors.orange;
         break;
       case 2:
-        resultText = 'Insomnia berat';
+        resultText = 'Insomnia';
         resultColor = Colors.red;
         break;
       default:
