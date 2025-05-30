@@ -126,40 +126,40 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
     );
 
     try {
+      final prefs = await SharedPreferences.getInstance();
+      final int? userId =
+          prefs.getInt('user_id'); // pastikan key ini sama saat simpan
 
-    final prefs = await SharedPreferences.getInstance();
-  final int? userId = prefs.getInt('user_id'); // pastikan key ini sama saat simpan
-
-  if (userId == null) {
-    Navigator.pop(context);
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        backgroundColor: const Color(0xFF1E2746),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: const Text(
-          'User Tidak Ditemukan',
-          style: TextStyle(color: Colors.white),
-        ),
-        content: const Text(
-          'User ID tidak ditemukan, silakan login ulang.',
-          style: TextStyle(color: Colors.white70),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text(
-              'OK',
-              style: TextStyle(color: Colors.deepPurple),
+      if (userId == null) {
+        Navigator.pop(context);
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: const Color(0xFF1E2746),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
             ),
+            title: const Text(
+              'User Tidak Ditemukan',
+              style: TextStyle(color: Colors.white),
+            ),
+            content: const Text(
+              'User ID tidak ditemukan, silakan login ulang.',
+              style: TextStyle(color: Colors.white70),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text(
+                  'OK',
+                  style: TextStyle(color: Colors.deepPurple),
+                ),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
-    return;
-  }
+        );
+        return;
+      }
 
       // Buat request object
       final request = {
