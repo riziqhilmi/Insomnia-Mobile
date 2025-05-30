@@ -35,6 +35,27 @@ class LocalizationService extends Translations {
           "daftar": "Register",
           "sudah punya akun?": "Already have an account?",
           "masuk": "Login",
+          "selamat datang kembali": "Welcome back",
+          "masuk ke akun anda": "Login to your account",
+          "masukkan email anda": "Enter your email address",
+          "masukkan kata sandi anda": "Enter your password",
+          "lupa kata sandi?": "Forgot Password?",
+          "belum punya akun?": "Don't have an account yet?",
+          "login berhasil!": "Login Successful!",
+          "login gagal": "Login Failed",
+          "login gagal, silakan coba lagi": "Login failed, please try again",
+          "terjadi kesalahan saat login'": "An error occurred while logging in",
+          "selamat Datang 🌙":"Welcome 🌙",
+          "tidurlah malam ini untuk hari esok yang lebih baik.": "Sleep tonight for a better tomorrow.",
+          "statistik": "Statistics",
+          "edukasi": "Education",
+          "berita terkini tentang tidur": "Latest News on Sleep",
+          "fitur berita masih dalam pengembangan.": "News feature is still under development.",
+          "tips tidur sehat": "Healthy Sleep Tips",
+          "beranda": "Home",
+          "prediksi": "Prediction",
+          "saya":"Me",
+
          
 
 
@@ -84,7 +105,27 @@ class LocalizationService extends Translations {
           "daftar": "Daftar",
           "sudah punya akun?": "Sudah punya akun?",
           "masuk": "Masuk",
-
+          "selamat datang kembali": "Selamat datang kembali",
+          "masuk ke akun anda": "Masuk ke akun Anda",
+          "masukkan email anda": "Masukkan email Anda",
+          "masukkan kata sandi anda": "Masukkan kata sandi Anda",
+          "lupa kata sandi?": "Lupa Kata Sandi?",
+          "belum punya akun?": "Belum punya akun?",
+          "login berhasil!": "Login Berhasil!",
+          "login gagal": "Login Gagal",
+          "login gagal, silakan coba lagi": "Login gagal, silakan coba lagi",
+          "terjadi kesalahan saat login": "Terjadi kesalahan saat login",
+          "selamat Datang 🌙": "Selamat Datang 🌙",
+          "tidurlah malam ini untuk hari esok yang lebih baik.": "Tidurlah malam ini untuk hari esok yang lebih baik.",
+          "statistik": "Statistik",
+          "edukasi": "Edukasi",
+          "berita terkini tentang tidur": "Berita Terkini tentang Tidur",
+          "fitur berita masih dalam pengembangan.": "Fitur berita masih dalam pengembangan.",
+          "tips tidur sehat": "Tips Tidur Sehat",
+          "beranda": "Beranda",
+          "prediksi": "Prediksi",
+          "saya": "Saya",
+          
 
 
 
