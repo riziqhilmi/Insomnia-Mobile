@@ -1,100 +1,63 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
-class EducationPage extends StatelessWidget {
-  final List<Map<String, dynamic>> edukasiList = [
-    {
-      'title': 'Apa itu Insomnia?',
-      'content':
-          'Insomnia adalah gangguan tidur yang menyebabkan kesulitan untuk tidur atau tetap tertidur. '
-              'Hal ini dapat membuat seseorang merasa tidak segar di pagi hari dan mempengaruhi produktivitas.',
-      'icon': Icons.nights_stay_rounded,
-    },
-    {
-      'title': 'Penyebab Umum',
-      'content':
-          'Penyebab umum insomnia meliputi stres, gangguan kecemasan, konsumsi kafein berlebih, '
-              'jadwal tidur yang tidak teratur, serta kondisi medis seperti nyeri kronis atau asma.',
-      'icon': Icons.psychology_rounded,
-    },
-    {
-      'title': 'Cara Mengatasi',
-      'content':
-          'Beberapa cara untuk mengatasi insomnia termasuk menjaga rutinitas tidur, menghindari layar sebelum tidur, '
-              'menghindari kafein di malam hari, serta melakukan teknik relaksasi seperti meditasi.',
-      'icon': Icons.healing_rounded,
-    },
-  ];
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Edukasi Tidur',
+      theme: ThemeData(
+        primaryColor: Color(0xFF1E2746),
+        brightness: Brightness.dark,
+      ),
+      home: EducationPage(),
+    );
+  }
+}
+
+class EducationPage extends StatefulWidget {
+  @override
+  _EducationPageState createState() => _EducationPageState();
+}
+
+class _EducationPageState extends State<EducationPage> {
+  late Future<List<Map<String, dynamic>>> futureEducation;
+
+  @override
+  void initState() {
+    super.initState();
+    futureEducation = fetchEducation();
+  }
+
+  Future<List<Map<String, dynamic>>> fetchEducation() async {
+    final response = await http.get(Uri.parse('http://127.0.0.1:5000/education'));
+
+    if (response.statusCode == 200) {
+      final jsonData = json.decode(response.body);
+      return List<Map<String, dynamic>>.from(jsonData['data']);
+    } else {
+      throw Exception('Failed to load education data');
+    }
+  }
 
   void showEducationDetail(BuildContext context, String title, String content) {
     showDialog(
       context: context,
-      builder: (context) => Dialog(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        child: Container(
-          padding: const EdgeInsets.all(20),
-          decoration: BoxDecoration(
-            color: const Color(0xFF1E2746),
-            borderRadius: BorderRadius.circular(25),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 15,
-                spreadRadius: 5,
-              ),
-            ],
+      builder: (context) => AlertDialog(
+        title: Text(title, style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+        content: Text(content, style: TextStyle(color: Colors.white70)),
+        backgroundColor: Color(0xFF1E2746),
+        actions: [
+          TextButton(
+            child: Text("Tutup", style: TextStyle(color: Colors.blueAccent)),
+            onPressed: () => Navigator.pop(context),
           ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 22,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 15),
-              Flexible(
-                child: SingleChildScrollView(
-                  child: Text(
-                    content,
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 16,
-                      height: 1.5,
-                    ),
-                    textAlign: TextAlign.justify,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 20),
-              GestureDetector(
-                onTap: () => Navigator.pop(context),
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
-                  decoration: BoxDecoration(
-                    gradient: const LinearGradient(
-                      colors: [Color(0xFF9C27B0), Color(0xFF673AB7)],
-                    ),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: const Text(
-                    "Tutup",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
+        ],
       ),
     );
   }
@@ -102,185 +65,70 @@ class EducationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF0A1128),
-      extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          'Edukasi Tidur',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            fontSize: 24,
-          ),
-        ),
-        flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF0A1128), Colors.transparent],
-            ),
-          ),
-        ),
+        title: const Text('Edukasi Tidur'),
+        backgroundColor: Color(0xFF1E2746),
       ),
-      body: Container(
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF0A1128),
-              Color(0xFF1E2746),
-            ],
-          ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Mari pelajari tentang tidur sehat',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Temukan informasi penting untuk tidur yang berkualitas',
-                        style: TextStyle(
-                          color: Colors.white60,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
+      body: FutureBuilder<List<Map<String, dynamic>>>(
+        future: futureEducation,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error: ${snapshot.error}', style: TextStyle(color: Colors.red)));
+          }
+          final edukasiList = snapshot.data!;
+
+          return ListView.builder(
+            itemCount: edukasiList.length,
+            itemBuilder: (context, index) {
+              final item = edukasiList[index];
+              return Container(
+                margin: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF3A3D5C), Color(0xFF1E2746)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
                   ),
+                  borderRadius: BorderRadius.circular(20),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black54,
+                      blurRadius: 10,
+                      offset: Offset(0, 5),
+                    ),
+                  ],
                 ),
-                Expanded(
-                  child: ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    itemCount: edukasiList.length,
-                    itemBuilder: (context, index) {
-                      final item = edukasiList[index];
-                      return Container(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            begin: Alignment.topLeft,
-                            end: Alignment.bottomRight,
-                            colors: [
-                              const Color(0xFF1E2746),
-                              const Color(0xFF131C3D),
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.2),
-                              blurRadius: 10,
-                              offset: const Offset(0, 5),
-                            ),
-                          ],
-                          border: Border.all(
-                            color: Colors.deepPurple.withOpacity(0.1),
-                            width: 1.5,
-                          ),
-                        ),
-                        child: Material(
-                          color: Colors.transparent,
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            splashColor: Colors.deepPurple.withOpacity(0.3),
-                            onTap: () {
-                              showEducationDetail(
-                                  context, item['title'], item['content']);
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Row(
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.all(12),
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      gradient: const LinearGradient(
-                                        colors: [
-                                          Color(0xFF9C27B0),
-                                          Color(0xFF673AB7)
-                                        ],
-                                      ),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: const Color(0xFF9C27B0)
-                                              .withOpacity(0.3),
-                                          blurRadius: 8,
-                                          spreadRadius: 1,
-                                        ),
-                                      ],
-                                    ),
-                                    child: Icon(
-                                      item['icon'],
-                                      color: Colors.white,
-                                      size: 28,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 16),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          item['title'],
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold,
-                                            fontSize: 18,
-                                          ),
-                                        ),
-                                        const SizedBox(height: 4),
-                                        Text(
-                                          item['content'].split('.').first +
-                                              '...',
-                                          style: const TextStyle(
-                                            color: Colors.white60,
-                                            fontSize: 14,
-                                          ),
-                                          maxLines: 2,
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  const Icon(
-                                    Icons.arrow_forward_ios_rounded,
-                                    color: Colors.white38,
-                                    size: 16,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
+                child: Card(
+                  elevation: 8,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  color: Colors.transparent,
+                  child: ListTile(
+                    title: Text(
+                      item['judul'],
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 18,
+                        color: Colors.white,
+                      ),
+                    ),
+                    subtitle: Text(
+                      item['konten'].split('.').first + '...',
+                      style: TextStyle(color: Colors.white70),
+                    ),
+                    onTap: () {
+                      showEducationDetail(context, item['judul'], item['konten']);
                     },
                   ),
                 ),
-              ],
-            ),
-          ),
-        ),
+              );
+            },
+          );
+        },
       ),
     );
   }

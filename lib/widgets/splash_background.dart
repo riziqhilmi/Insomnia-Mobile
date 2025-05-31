@@ -45,7 +45,7 @@ class SplashTitle extends StatelessWidget {
     return const Align(
       alignment: Alignment(0, -0.2),
       child: Text(
-        "ISOMNIC",
+        "INSOMNIC",
         style: TextStyle(
           color: Colors.white,
           fontSize: 28,
