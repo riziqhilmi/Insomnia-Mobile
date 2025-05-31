@@ -145,12 +145,12 @@ class HomePage extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   SleepButton(
-                    text: 'tips tidur Sehat'.tr,
+                    text: 'tips tidur sehat'.tr,
                     onPressed: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const TipsTidurPage(),
+                          builder: (context) => TipsTidurPage(),
                         ),
                       );
                     },

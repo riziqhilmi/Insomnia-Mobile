@@ -67,6 +67,20 @@ class LocalizationService extends Translations {
           "hak cipta": "Copyright",
           "kebijakan privasi": "Privacy Policy",
           "data pengguna tidak disimpan atau dibagikan ke pihak ketiga.": "User data is not stored or shared with third parties.",
+          "tidur dan bangun di waktu yang sama setiap hari.": "Sleep and wake up at the same time every day.",
+          "hindari kafein dan alkohol menjelang tidur.": "Avoid caffeine and alcohol before bedtime.",
+          "ciptakan suasana kamar yang tenang, gelap, dan sejuk.": "Create a calm, dark, and cool bedroom environment.",
+          "hindari penggunaan gadget 1 jam sebelum tidur.": "Avoid using gadgets 1 hour before bedtime.",
+          "lakukan relaksasi seperti meditasi atau pernapasan dalam.": "Practice relaxation techniques like meditation or deep breathing.",
+          "batasi tidur siang maksimal 30 menit.": "Limit naps to a maximum of 30 minutes.",
+          "rutin berolahraga, tetapi hindari olahraga berat menjelang tidur.": "Exercise regularly, but avoid heavy workouts before bedtime.",
+          "gunakan kasur dan bantal yang nyaman.": "Use a comfortable mattress and pillows.",
+          "jika tidak bisa tidur, bangunlah dan lakukan aktivitas ringan.": "If you can't sleep, get up and do a light activity.",
+          "buat rutinitas sebelum tidur, seperti membaca atau mandi air hangat.": "Establish a bedtime routine, such as reading or taking a warm bath.",
+
+
+
+
          
 
 
@@ -148,6 +162,17 @@ class LocalizationService extends Translations {
           "hak cipta": "Hak Cipta",
           "kebijakan privasi": "Kebijakan Privasi",
           "data pengguna tidak disimpan atau dibagikan ke pihak ketiga.": "Data pengguna tidak disimpan atau dibagikan ke pihak ketiga.",
+          "tidur dan bangun di waktu yang sama setiap hari.": "Tidur dan bangun di waktu yang sama setiap hari.",
+          "hindari kafein dan alkohol menjelang tidur.": "Hindari kafein dan alkohol menjelang tidur.",
+          "ciptakan suasana kamar yang tenang, gelap, dan sejuk.": "Ciptakan suasana kamar yang tenang, gelap, dan sejuk.",
+          "hindari penggunaan gadget 1 jam sebelum tidur.": "Hindari penggunaan gadget 1 jam sebelum tidur.",
+          "lakukan relaksasi seperti meditasi atau pernapasan dalam.": "Lakukan relaksasi seperti meditasi atau pernapasan dalam.",
+          "batasi tidur siang maksimal 30 menit.": "Batasi tidur siang maksimal 30 menit.",
+          "rutin berolahraga, tetapi hindari olahraga berat menjelang tidur.": "Rutin berolahraga, tetapi hindari olahraga berat menjelang tidur.",
+          "gunakan kasur dan bantal yang nyaman.": "Gunakan kasur dan bantal yang nyaman.",
+          "jika tidak bisa tidur, bangunlah dan lakukan aktivitas ringan.": "Jika tidak bisa tidur, bangunlah dan lakukan aktivitas ringan.",
+          "buat rutinitas sebelum tidur, seperti membaca atau mandi air hangat.": "Buat rutinitas sebelum tidur, seperti membaca atau mandi air hangat.",
+
 
 
 

@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class TipsTidurPage extends StatelessWidget {
-  const TipsTidurPage({super.key});
+  TipsTidurPage({super.key});
 
-  final List<String> tipsTidur = const [
-    'Tidur dan bangun di waktu yang sama setiap hari.',
-    'Hindari kafein dan alkohol menjelang tidur.',
-    'Ciptakan suasana kamar yang tenang, gelap, dan sejuk.',
-    'Hindari penggunaan gadget 1 jam sebelum tidur.',
-    'Lakukan relaksasi seperti meditasi atau pernapasan dalam.',
-    'Batasi tidur siang maksimal 30 menit.',
-    'Rutin berolahraga, tetapi hindari olahraga berat menjelang tidur.',
-    'Gunakan kasur dan bantal yang nyaman.',
-    'Jika tidak bisa tidur, bangunlah dan lakukan aktivitas ringan.',
-    'Buat rutinitas sebelum tidur, seperti membaca atau mandi air hangat.',
+  final List<String> tipsTidur = [
+    'tidur dan bangun di waktu yang sama setiap hari.'.tr,
+    'hindari kafein dan alkohol menjelang tidur.'.tr,
+    'ciptakan suasana kamar yang tenang, gelap, dan sejuk.'.tr,
+    'hindari penggunaan gadget 1 jam sebelum tidur.'.tr,
+    'lakukan relaksasi seperti meditasi atau pernapasan dalam.'.tr,
+    'batasi tidur siang maksimal 30 menit.'.tr,
+    'rutin berolahraga, tetapi hindari olahraga berat menjelang tidur.'.tr,
+    'gunakan kasur dan bantal yang nyaman.'.tr,
+    'jika tidak bisa tidur, bangunlah dan lakukan aktivitas ringan.'.tr,
+    'buat rutinitas sebelum tidur, seperti membaca atau mandi air hangat.'.tr,
   ];
 
   @override
@@ -47,8 +48,8 @@ class TipsTidurPage extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Text(
-                    'Tips Tidur Sehat',
+                   Text(
+                    'tips tidur sehat'.tr,
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
