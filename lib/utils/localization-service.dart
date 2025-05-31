@@ -55,7 +55,18 @@ class LocalizationService extends Translations {
           "beranda": "Home",
           "prediksi": "Prediction",
           "saya":"Me",
-
+          "edit profil pengguna": "Edit User Profile",
+          "keamanan & privasi": "Security & Privacy",
+          "tentang_aplikasi": "About Application",
+          "keluar akun": "Logout Account",
+          "versi: 1.0.0": "version: 1.0.0",
+          "insomnic adalah aplikasi yang dirancang untuk membantu pengguna memahami dan mengatasi masalah insomnia. aplikasi ini menyediakan informasi seputar pola tidur, edukasi, prediksi kualitas tidur, serta grafik statistik yang mudah dipahami.": "Insomnic is an application designed to help users understand and address insomnia issues. It provides information on sleep patterns, education, sleep quality predictions, and easy-to-understand statistical graphs.",
+          "dikembangkan oleh": "Developed by",
+          "tim insomnic": "Insomnic Team",
+          "kontak": "Contact",
+          "hak cipta": "Copyright",
+          "kebijakan privasi": "Privacy Policy",
+          "data pengguna tidak disimpan atau dibagikan ke pihak ketiga.": "User data is not stored or shared with third parties.",
          
 
 
@@ -125,7 +136,18 @@ class LocalizationService extends Translations {
           "beranda": "Beranda",
           "prediksi": "Prediksi",
           "saya": "Saya",
-          
+          "edit profil pengguna": "Edit Profil Pengguna",
+          "keamanan & privasi": "Keamanan & Privasi",
+          "tentang_aplikasi": "Tentang Aplikasi",
+          "keluar akun": "Keluar Akun",
+          "versi: 1.0.0": "versi: 1.0.0",
+          "insomnic adalah aplikasi yang dirancang untuk membantu pengguna memahami dan mengatasi masalah insomnia. aplikasi ini menyediakan informasi seputar pola tidur, edukasi, prediksi kualitas tidur, serta grafik statistik yang mudah dipahami.": "Insomnic adalah aplikasi yang dirancang untuk membantu pengguna memahami dan mengatasi masalah insomnia. Aplikasi ini menyediakan informasi seputar pola tidur, edukasi, prediksi kualitas tidur, serta grafik statistik yang mudah dipahami.",
+          "dikembangkan oleh": "Dikembangkan oleh",
+          "tim insomnic": "Tim Insomnic",
+          "kontak": "Kontak",
+          "hak cipta": "Hak Cipta",
+          "kebijakan privasi": "Kebijakan Privasi",
+          "data pengguna tidak disimpan atau dibagikan ke pihak ketiga.": "Data pengguna tidak disimpan atau dibagikan ke pihak ketiga.",
 
 
 
@@ -143,10 +165,8 @@ class LocalizationService extends Translations {
           "pengaturan": "Pengaturan",
           "pilih_bahasa": "Pilih Bahasa",
           "Pilih bahasa pilihan Anda untuk melanjutkan": "Pilih bahasa pilihan Anda untuk melanjutkan",
-          "bantuan": "Bantuan",
-          "tentang_aplikasi": "Tentang Aplikasi",
+          "bantuan": "Bantuan", 
           "keluar_desk": "Apakah anda yakin untuk keluar?",
-          "keluar": "Keluar",
           "batal": "Batal",
           "iya": "Iya",
          }

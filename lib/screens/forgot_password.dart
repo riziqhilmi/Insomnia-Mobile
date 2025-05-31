@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import '../widgets/custom_button.dart';
 import 'otp_verification_screen.dart';
+import 'dart:async';
+import 'package:http/http.dart' as myhttp;
 
 class ForgotPasswordScreen extends StatefulWidget {
   const ForgotPasswordScreen({super.key});
@@ -199,6 +203,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                     text: 'Kirim',
                     onPressed: () {
                       if (_validateEmail()) {
+                        _emailverification(context);
+
                         // Jika email valid, navigasi ke OtpVerificationScreen dengan email
                         Navigator.push(
                           context,
@@ -334,7 +340,55 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
       ),
     );
   }
+Future<void>_emailverification(BuildContext context) async {
+    final email = _emailController.text.trim();
+    if (email.isEmpty || !email.contains('@')) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Masukkan email yang valid'),
+          backgroundColor: Color(0xFFFF8A8A),
+        ),
+      );
+      return;
+    }
+
+    try {
+      final response = await myhttp.post(
+        Uri.parse('http://127.0.0.1:5000/verifikasi-email'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({'email': email}),
+      );
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Permintaan reset password berhasil dikirim!'),
+            backgroundColor: Color(0xFF4B6DE9),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Terjadi kesalahan, silakan coba lagi.'),
+            backgroundColor: Color(0xFFFF8A8A),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Terjadi kesalahan jaringan, silakan coba lagi.'),
+          backgroundColor: Color(0xFFFF8A8A),
+        ),
+      );
+    }
+  }
+
 }
+
+
 
 class MoonPainter extends CustomPainter {
   @override

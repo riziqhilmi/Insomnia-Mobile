@@ -1,16 +1,16 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
 import '../widgets/custom_button.dart';
 import '../screens/reset_password.dart';
+import 'package:http/http.dart' as myhttp;
 
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
 
-  const OtpVerificationScreen({
-    super.key,
-    required this.email,
-  });
+  const OtpVerificationScreen({super.key,required this.email,});
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -385,5 +385,54 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         },
       ),
     );
-  }
+   }
+    Future<void>  _codeVerify(BuildContext context,String kode, String email) async {
+    try {
+      var responses = await myhttp.post(Uri.parse('http://192.168.1.16:5000/verifikasi-email'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'kode': kode,
+          'email': email,
+        }),
+      );
+      if (responses.statusCode == 200) {
+        var data = jsonDecode(responses.body);
+        if (data['status'] == 'success') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Verifikasi berhasil!'),
+              backgroundColor: Colors.green.shade700,
+            ),
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Kode verifikasi salah atau kadaluarsa.'),
+              backgroundColor: Colors.red.shade700,
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal menghubungi server.'),
+            backgroundColor: Colors.red.shade700,
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Terjadi kesalahan: $e'),
+          backgroundColor: Colors.red.shade700,
+        ),
+      );
+    }
+    }
 }

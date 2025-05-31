@@ -86,15 +86,15 @@ class ProfilePage extends StatelessWidget {
                 shrinkWrap: true,
                 padding: EdgeInsets.zero,
                 children: [
-                  _buildButton(context, 'Edit Profil Pengguna', Icons.edit,
+                  _buildButton(context, 'edit profil pengguna'.tr, Icons.edit,
                       isEditProfile: true),
-                  _buildButton(context, 'Keamanan & privasi', Icons.lock,
+                  _buildButton(context, 'keamanan & privasi'.tr, Icons.lock,
                       isSecurity: true),
                   _buildButton(context, 'bahasa'.tr, Icons.language,
                       isLanguage: true),
-                  _buildButton(context, 'Tentang Aplikasi'.tr, Icons.info,
-                      isAboutApp: true), // <- Tambahkan flag baru
-                  _buildButton(context, 'Keluar Akun', Icons.logout,
+                  _buildButton(context, 'tentang_aplikasi'.tr, Icons.info,
+                      isAboutApp: true), 
+                  _buildButton(context, 'keluar akun'.tr, Icons.logout,
                       isLogout: true),
                 ],
               ),
@@ -116,11 +116,11 @@ class ProfilePage extends StatelessWidget {
             // Tambahkan navigasi ke halaman prediksi jika ada
           }
         },
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+        items:  [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'beranda'.tr),
           BottomNavigationBarItem(
-              icon: Icon(Icons.analytics), label: 'Prediksi'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Saya'),
+              icon: Icon(Icons.analytics), label: 'prediksi'.tr),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'saya'.tr),
         ],
       ),
     );
