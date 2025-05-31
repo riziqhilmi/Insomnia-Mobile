@@ -233,23 +233,41 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
   void _showResultDialog(Map<String, dynamic> response) {
     String resultText;
     Color resultColor;
+    String? tips;
+    bool showTipsButton = true;
 
     switch (response['prediction']) {
       case 0:
         resultText = 'Tidak ada insomnia';
         resultColor = Colors.green;
+        showTipsButton = false; // Tidak menampilkan tombol Tips untuk hasil ini
         break;
       case 1:
         resultText = 'Risiko Insomnia';
         resultColor = Colors.orange;
+        tips = '''
+• Coba tidur dan bangun di waktu yang sama setiap hari
+• Kurangi konsumsi kafein terutama di sore/malam hari
+• Buat lingkungan tidur yang nyaman (gelap, sejuk, tenang)
+• Lakukan aktivitas relaksasi sebelum tidur
+• Batasi waktu tidur siang maksimal 30 menit
+''';
         break;
       case 2:
         resultText = 'Insomnia';
         resultColor = Colors.red;
+        tips = '''
+• Konsultasikan dengan dokter atau profesional kesehatan
+• Hindari penggunaan tempat tidur untuk aktivitas selain tidur
+• Kelola stres dengan teknik relaksasi
+• Pertimbangkan untuk membuat jurnal tidur
+• Hindari alkohol dan nikotin yang dapat mengganggu tidur
+''';
         break;
       default:
         resultText = 'Hasil tidak diketahui';
         resultColor = Colors.grey;
+        tips = 'Tidak ada tips yang tersedia untuk hasil ini';
     }
 
     showDialog(
@@ -300,6 +318,25 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
               ),
             ),
             const SizedBox(height: 24),
+            if (showTipsButton) ...[
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: Colors.white,
+                  backgroundColor: Colors.blue,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                ),
+                onPressed: () {
+                  Navigator.pop(context); // Close the result dialog
+                  _showTipsDialog(tips!, resultColor); // Show tips dialog
+                },
+                child: const Text('Tips'),
+              ),
+              const SizedBox(height: 12),
+            ],
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 foregroundColor: Colors.white,
@@ -315,6 +352,39 @@ class _SleepClassificationPageState extends State<SleepClassificationPage>
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showTipsDialog(String tips, Color color) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: const Color(0xFF1E2746),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: color.withOpacity(0.5), width: 2),
+        ),
+        title: const Text(
+          'Tips untuk Anda',
+          style: TextStyle(color: Colors.white),
+          textAlign: TextAlign.center,
+        ),
+        content: SingleChildScrollView(
+          child: Text(
+            tips,
+            style: const TextStyle(color: Colors.white70),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text(
+              'Tutup',
+              style: TextStyle(color: Colors.deepPurple),
+            ),
+          ),
+        ],
       ),
     );
   }
