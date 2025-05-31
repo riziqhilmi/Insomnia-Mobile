@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:async';
@@ -10,7 +9,7 @@ import 'package:http/http.dart' as myhttp;
 class OtpVerificationScreen extends StatefulWidget {
   final String email;
 
-  const OtpVerificationScreen({super.key,required this.email,});
+  const OtpVerificationScreen({super.key, required this.email});
 
   @override
   State<OtpVerificationScreen> createState() => _OtpVerificationScreenState();
@@ -22,8 +21,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
 
   Timer? _timer;
-  int _remainingSeconds = 120; // 2 minutes
+  int _remainingSeconds = 120;
   String _formattedTime = "02:00";
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -63,14 +63,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   }
 
   void resendOTP() {
-    // Implement your resend OTP logic here
     setState(() {
       _remainingSeconds = 120;
       _formattedTime = "02:00";
     });
     startTimer();
 
-    // Show snackbar to confirm OTP was resent
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text('OTP baru telah dikirim ke ${widget.email}'),
@@ -79,33 +77,59 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     );
   }
 
-  void verifyOTP() {
-    // Collect all digits
-    String completeOTP =
-        _otpControllers.map((controller) => controller.text).join();
-
-    // Check if OTP is complete
-    if (completeOTP.length != 4) {
+  Future<void> _codeVerify(BuildContext context, String kode, String email) async {
+    setState(() => _isLoading = true);
+    try {
+      var responses = await myhttp.post(
+        Uri.parse('http://127.0.0.1:5000/verifikasi-email'),
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: jsonEncode({
+          'kode': kode,
+          'email': email,
+          'action': 'verification_email_code',
+        }),
+      );
+      if (responses.statusCode == 200) {
+        var data = jsonDecode(responses.body);
+        if (data['status'] == 'success') {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Verifikasi berhasil!'),
+              backgroundColor: Colors.green.shade700,
+            ),
+          );
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => ResetPasswordScreen(email: email)),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Kode verifikasi salah atau kadaluarsa.'),
+              backgroundColor: Colors.red.shade700,
+            ),
+          );
+        }
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Gagal menghubungi server.'),
+            backgroundColor: Colors.red.shade700,
+          ),
+        );
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Mohon masukkan kode OTP lengkap'),
+          content: Text('Terjadi kesalahan: $e'),
           backgroundColor: Colors.red.shade700,
         ),
       );
-      return;
+    } finally {
+      setState(() => _isLoading = false);
     }
-
-    // Here you would call your verification API
-    // For now, we'll just show a success message
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text('Verifikasi OTP berhasil!'),
-        backgroundColor: Colors.green.shade700,
-      ),
-    );
-
-    // Navigate to the next screen after verification
-    // Navigator.of(context).pushReplacement(...);
   }
 
   @override
@@ -120,7 +144,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(height: 40),
-                // App bar with back button
                 Row(
                   children: [
                     GestureDetector(
@@ -140,10 +163,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ],
                 ),
-
                 SizedBox(height: 30),
-
-                // Sleep themed illustration
                 Center(
                   child: Container(
                     width: 200,
@@ -198,10 +218,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 40),
-
-                // Title
                 Center(
                   child: Text(
                     'Verifikasi Email',
@@ -213,10 +230,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 12),
-
-                // Instruction text
                 Center(
                   child: Text(
                     'Kode verifikasi telah dikirim ke',
@@ -226,10 +240,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 4),
-
-                // Email display
                 Center(
                   child: Text(
                     widget.email,
@@ -240,21 +251,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 50),
-
-                // OTP input fields
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(
-                    4,
-                    (index) => _buildOTPDigitField(index),
-                  ),
+                  children:
+                      List.generate(4, (index) => _buildOTPDigitField(index)),
                 ),
-
                 SizedBox(height: 50),
-
-                // Timer and resend option
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -275,10 +278,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ],
                 ),
-
                 SizedBox(height: 16),
-
-                // Resend button
                 Center(
                   child: TextButton(
                     onPressed: _remainingSeconds > 0 ? null : resendOTP,
@@ -294,27 +294,31 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     ),
                   ),
                 ),
-
                 SizedBox(height: 50),
-
-                // Verify button
-                CustomButton(
-                  text: 'Verifikasi',
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const  ResetPasswordScreen (),
+                _isLoading
+                    ? Center(child: CircularProgressIndicator())
+                    : CustomButton(
+                        text: 'Verifikasi',
+                        onPressed: () {
+                          String kode =_otpControllers.map((c) => c.text).join();
+                          if (kode.length == 4) {
+                            _codeVerify(context, kode, widget.email);
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content:
+                                    Text('Mohon isi kode OTP dengan lengkap'),
+                                backgroundColor: Colors.red.shade700,
+                              ),
+                            );
+                          }
+                        },
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF7583CA), Color(0xFF8E97FD)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
                       ),
-                    );
-                  },
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF7583CA), Color(0xFF8E97FD)],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                ),
-
                 SizedBox(height: 30),
               ],
             ),
@@ -361,78 +365,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             ),
           ),
         ),
-        inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-        ],
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
         onChanged: (value) {
-          if (value.isNotEmpty) {
-            // Move to next field if available
-            if (index < 3) {
-              _focusNodes[index + 1].requestFocus();
-            } else {
-              _focusNodes[index].unfocus();
-              // Auto verify when all fields are filled
-              if (_otpControllers
-                  .every((controller) => controller.text.isNotEmpty)) {
-                // Optional: auto verify
-                // verifyOTP();
-              }
-            }
-          } else if (index > 0 && value.isEmpty) {
-            // Move to previous field on backspace with empty field
+          if (value.isNotEmpty && index < 3) {
+            _focusNodes[index + 1].requestFocus();
+          } else if (value.isEmpty && index > 0) {
             _focusNodes[index - 1].requestFocus();
           }
         },
       ),
     );
-   }
-    Future<void>  _codeVerify(BuildContext context,String kode, String email) async {
-    try {
-      var responses = await myhttp.post(Uri.parse('http://192.168.1.16:5000/verifikasi-email'),
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: jsonEncode({
-          'kode': kode,
-          'email': email,
-        }),
-      );
-      if (responses.statusCode == 200) {
-        var data = jsonDecode(responses.body);
-        if (data['status'] == 'success') {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Verifikasi berhasil!'),
-              backgroundColor: Colors.green.shade700,
-            ),
-          );
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => ResetPasswordScreen()),
-          );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Kode verifikasi salah atau kadaluarsa.'),
-              backgroundColor: Colors.red.shade700,
-            ),
-          );
-        }
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Gagal menghubungi server.'),
-            backgroundColor: Colors.red.shade700,
-          ),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Terjadi kesalahan: $e'),
-          backgroundColor: Colors.red.shade700,
-        ),
-      );
-    }
-    }
+  }
 }

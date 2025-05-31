@@ -358,7 +358,11 @@ Future<void>_emailverification(BuildContext context) async {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: jsonEncode({'email': email}),
+        body: jsonEncode({
+          'email': email,
+          'action': 'verification_email',
+          }),
+        
       );
 
       if (response.statusCode == 200) {
@@ -377,9 +381,10 @@ Future<void>_emailverification(BuildContext context) async {
         );
       }
     } catch (e) {
+      print(e);
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Terjadi kesalahan jaringan, silakan coba lagi.'),
+          content: Text('Terjadi kesalahan jaringan, silakan coba lagi. 000'),
           backgroundColor: Color(0xFFFF8A8A),
         ),
       );
