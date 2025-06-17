@@ -19,9 +19,9 @@ class LocalizationService extends Translations {
           "nama belakang": "Last Name",
           "nama belakang tidak boleh kosong": "Last name cannot be empty",
           "jenis Kelamin": "Gender",
-          "pilih jenis kelamin":"select gender",
-          "laki laki":"male",
-          "perempuan":"female",
+          "pilih jenis kelamin":"Select gender",
+          "laki-laki":"Male",
+          "perempuan":"Female",
           "tanggal lahir": "Date of Birth",
           "tanggal lahir wajib diisi": "Date of birth is required",
           "nomor telepon": "Phone Number",
@@ -77,6 +77,132 @@ class LocalizationService extends Translations {
           "gunakan kasur dan bantal yang nyaman.": "Use a comfortable mattress and pillows.",
           "jika tidak bisa tidur, bangunlah dan lakukan aktivitas ringan.": "If you can't sleep, get up and do a light activity.",
           "buat rutinitas sebelum tidur, seperti membaca atau mandi air hangat.": "Establish a bedtime routine, such as reading or taking a warm bath.",
+          "profil":"Profile",
+          "kebiasaan":"Habit",
+          "tidur":"Sleep",
+          "kondisi":"Condition",
+          "profil anda":"Your profile",
+          "pilih tahun akademik":"Select Academic Year",
+          "tahun akademik":"Academic Year",
+          "tahun pertama":"First Year",
+          "tahun kedua": "Second Year",
+          "tahun ketiga": "Third Year",
+          "mahasiswa pascasarjana":"Graduate Student",
+          "klasifikasi":"Classification",
+          "lanjut":"Next",
+          "sebelumnya":"Previously",
+          "kebiasaan tidur":"Sleeping habits",
+          "kesulitan tidur":"Difficulty Sleeping",
+          "pilih frekuensi":"Select Frequency",
+          "tidak pernah":"Never",
+          "jarang":"Seldom",
+          "kadang-kadang":"Sometimes",
+          "sering":"Always",
+          "selalu":"Often",
+          "penggunaan perangkat sebelum tidur":"Use Of Devices Before Bed",
+          "kebiasaan sehari-hari":"Daily Habits",
+          "klasifikasi tidur":"sleep classification",
+          "konsumsi kafein":"Caffeine Consumption",
+          "tips untuk anda":"Tips For You",
+          "tutup":"Close",
+          "kembali":"Return",
+          "tingkat insomnia:":"insomnia level",
+          "hasil klasifikasi":"Classified Results",
+          "jarang (1-2 kali/minggu)":"Rarely (1-2 times/week)",
+          "kadang-kadang (3-4/minggu)":"Sometimes (3-4/week)",
+          "sering (5-6 kali/minggu)":"Frequently (5-6 times/week)",
+          "setiap hari":"Everyday",
+          "lama tidur (jam)":"Length of sleep (hours)",
+          "pilih lama tidur":"Select Sleep Duration",
+          "lebih dari 8 jam":"More than 8 hours",
+          "7-8 jam":"7-8 hours",
+          "6-7 jam":"6-7 hours",
+          "5-6 jam":"5-6 hours",
+          "4-5 jam":"4-5 hours",
+          "kurang dari 4 jam":"Less than 4 hours",
+          "kurang dari 5 jam":"Less than 5 hours",
+          "terbangun di malam hari":"Awake at Night",
+          "kualias tidur":"Sleep Quality",
+          "pilih kualias tidur":"Select Sleep Quality",
+          "sangat baik":"Very Good",
+          "baik":"Good",
+          "cukup":"Fair",
+          "buruk":"Poor",
+          "sangat buruk":"Very Poor",
+          "kondisi mental":"Mental Condition",
+          "kesulitan konsentrasi":"Difficulty Concentrating",
+          "kelelahan":"Disorders",
+          "ketidak hadiran kuliah":"Class Absence",
+          "jarang (1-2 kali/bulan)":"Rarely (1-2 times/month)",
+          "tingkat stres":"Stres Level",
+          "pilih tingkat stres":"Select Stres Level",
+          "tidak stress":"Not Stressed",
+          "stress rendah":"Low Stress",
+          "stress sedang":"Moderate Stress",
+          "stress tinggi":"High Stress",
+          "sangat tinggi":"Very High Stress",
+          "performa akademik":"Academic Performance",
+          "pilih performa": "Select Performance",
+          "dibawah rata-rata":"Below Average",
+          "terjadi kesalahan": "An error occurred",
+          "tidak ada insomnia": "No Insomnia",
+          "risiko insomnia":" Insomnia Risk",
+          "hasil tidak diketahuoi": "Results are unknown",
+          "tidak ada tips yang tersedia untuk hasil ini": "No tips available for this result",
+          "data tidak lengkap":"Incomplete data",
+          "harap isi semua field sebelum melakukan klasifikasi":"Please fill in all fields before classifying",
+          "aktivitas olahraga": "Exercise Activity",
+
+
+          "email tidak  boleh kosong": "Email cannot be empty",
+          "email harus mengandung tanda @": "Email must contain @",
+          "lupa pasword": "Forgot Password",
+          "masukkan email anda untuk reset password": "Enter your email to reset password",
+          "kirim": "Send",
+          "masukkan email yang valid": "Please enter a valid email address",
+          "permintaan reset password berhasil dikirim!": "Password reset request sent successfully!",
+          "terjadi kesalahan, silakan coba lagi.":"An error occurred, please try again.",
+          "terjadi kesalahan jaringan, silakan coba lagi. 000":"Network error, please try again. 000",
+          "otp baru telah dikirim ke":"A new otp has been sent to",
+          "verifikasi berhasil!":"Verification successful!",
+          "kode verifikasi salah atau kadaluarsa.":"Verification code is incorrect or expired.",
+          "gagal menghubungi server.":"Failed to contact server.",
+          "terjadi kesalahan:":"An error occurred:",
+          "verifikasi email":"email verification",
+          "kode verifikasi telah dikirim ke":"Verification code has been sent to",
+          "kirim ulang kode dalam":"Resend code in",
+          "kirim ulang Kode":"Resend Code",
+          "verifikasi":"Verification",
+          "mohon isi kode OTP dengan lengkap": "Please fill in the OTP code completely",
+
+          
+
+
+
+          
+          
+        
+
+
+
+
+         
+          
+
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -172,6 +298,131 @@ class LocalizationService extends Translations {
           "gunakan kasur dan bantal yang nyaman.": "Gunakan kasur dan bantal yang nyaman.",
           "jika tidak bisa tidur, bangunlah dan lakukan aktivitas ringan.": "Jika tidak bisa tidur, bangunlah dan lakukan aktivitas ringan.",
           "buat rutinitas sebelum tidur, seperti membaca atau mandi air hangat.": "Buat rutinitas sebelum tidur, seperti membaca atau mandi air hangat.",
+          "profil":"Profil",
+          "kebiasaan":"Kebiasaan",
+          "tidur":"Tidur",
+          "kondisi":"Kondisi",
+          "profil anda":"Profil Anda",
+          "tahun akademik":"Tahun Akademik",
+          "pilih tahun akademik":"Pilih Tahun Akademik",
+          "tahun pertama":"Tahun Pertama",
+          "tahun kedua":"Tahun Kedua",
+          "tahun ketiga":"Tahun Ketiga",
+          "mahasiswa pascasarjana":"Mahasiswa Pascasarjana",
+          "klasifikasi":"Klasifikasi",
+          "lanjut":"Lanjut",
+          "sebelumnya":"Sebelumnya",
+          "kebiasaan tidur":"Kebiasaan Tidur",
+          "kesulitan tidur":"Kesulitan Tidur",
+          "pilih frekuensi":"Pilih Frekuensi",
+          "tidak pernah":"Tidak Pernah",
+          "jarang":"Jarang",
+          "kadang-kadang":"Kadang-kadang",
+          "sering":"Sering",
+          "selalu":"Selalu",
+          "penggunaan perangkat sebelum tidur":"Penggunaan Perangkat Sebelum Tidur",
+          "Kebiasaan sehari-hari":"Kebiasaan Sehari-hari",
+          "klasifikasi tidur":"Klasifikasi Tidur",
+          "konsumsi kafein":"Konsumsi Kafein",
+          "tips untuk anda":"Tips Untuk Anda",
+          "tutup":"Tutup",
+          "kembali":"Kembali",
+          "tingkat insomnia:":"Tingkat Insomnia:",
+          "hasil klasifikasi":"Hasil Klasifikasi",
+          "jarang (1-2 kali/minggu)":"Jarang (1-2 kali/minggu)",
+          "kadang-kadang (3-4/minggu)":"Kadang-kadang (3-4/minggu)",
+          "sering (5-6 kali/minggu)":"Sering (5-6 kali/minggu)",
+          "setiap hari":"Setiap hari",
+          "lama tidur (jam)":"Lama Tidur (jam)",
+          "pilih lama tidur":"Pilih Lama Tidur",
+          "lebih dari 8 jam":"Lebih dari 8 jam",
+          "7-8 jam":"7-8 jam",
+          "6-7 jam":"6-7 jam",
+          "5-6 jam":"5-6 jam",
+          "4-5 jam":"4-5 jam",
+          "kurang dari 4 jam":"Kurang dari 4 jam",
+          "kurang dari 5 jam":"Kurang dari 5 jam",
+          "terbangun di malam hari":"Terbangun di Malam Hari",
+          "kualias tidur":"Kualitas Tidur",
+          "pilih kualias tidur":"Pilih Kualitas Tidur",
+          "sangat baik":"Sangat Baik",
+          "baik":"Baik",
+          "cukup":"Cukup",
+          "buruk":"Buruk",
+          "sangat buruk":"Sangat Buruk",
+          "kondisi mental":"Kondisi Mental",
+          "kesulitan konsentrasi":"Kesulitan Konsentrasi",
+          "kelelahan":"Kelelahan",
+          "ketidak hadiran kuliah":"Ketidakhadiran Kuliah",
+          "jarang (1-2 kali/bulan)":"Jarang (1-2 kali/bulan)",
+          "tingkat stres":"Tingkat Stres",
+          "pilih tingkat stres":"Pilih Tingkat Stres",
+          "tidak stress":"Tidak Stres",
+          "stress rendah":"Stres Rendah",
+          "stress sedang":"Stres Sedang",
+          "stress tinggi":"Stres Tinggi",
+          "sangat tinggi":"Sangat Tinggi",
+          "performa akademik":"Performa Akademik",
+          "pilih performa": "Pilih Performa",
+          "dibawah rata-rata":"Di bawah rata-rata",
+          "terjadi kesalahan": "Terjadi kesalahan",
+          "tidak ada insomnia": "Tidak ada insomnia",
+          "risiko insomnia":"Risiko Insomnia",
+          "hasil tidak diketahuoi": "Hasil tidak diketahui",
+          "tidak ada tips yang tersedia untuk hasil ini": "Tidak ada tips yang tersedia untuk hasil ini",
+          "data tidak lengkap":"Data tidak lengkap",
+          "harap isi semua field sebelum melakukan klasifikasi":"Harap isi semua field sebelum melakukan klasifikasi",
+          "aktivitas olahraga": "Aktivitas Olahraga",
+
+
+          "email tidak  boleh kosong": "Email tidak boleh kosong",
+          "email harus mengandung tanda @": "Email harus mengandung tanda @",
+          "lupa pasword": "Lupa Password",
+          "masukkan email anda untuk reset password": "Masukkan email Anda untuk reset password",
+          "kirim": "Kirim",
+          "masukkan email yang valid": "Masukkan email yang valid",
+          "permintaan reset password berhasil dikirim!": "Permintaan reset password berhasil dikirim!",
+          "terjadi kesalahan, silakan coba lagi.": "Terjadi kesalahan, silakan coba lagi.",
+          "terjadi kesalahan jaringan, silakan coba lagi. 000": "Terjadi kesalahan jaringan, silakan coba lagi. 000",
+          "otp baru telah dikirim ke": "OTP baru telah dikirim ke",
+          "verifikasi berhasil!": "Verifikasi berhasil!",
+          "kode verifikasi salah atau kadaluarsa.": "Kode verifikasi salah atau kadaluarsa.",
+          "gagal menghubungi server.": "Gagal menghubungi server.",
+          "terjadi kesalahan:": "Terjadi kesalahan:",
+          "verifikasi email": "Verifikasi Email",
+          "kode verifikasi telah dikirim ke":"Kode verifikasi telah dikirim ke",
+          "kirim ulang kode dalam": "Kirim ulang kode dalam",
+          "kirim ulang Kode": "Kirim ulang Kode",
+          "verifikasi": "Verifikasi",
+          "mohon isi kode OTP dengan lengkap": "Mohon isi kode OTP dengan lengkap",
+
+          
+          
+
+
+          
+
+
+
+
+
+         
+
+
+          
+
+
+
+
+
+
+
+          
+
+
+
+
+
 
 
 

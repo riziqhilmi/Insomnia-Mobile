@@ -1,16 +1,16 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:insomnia_app/utils/base-url.dart';
 import 'prediction_request.dart';
 
 class ApiService {
-  static const String baseUrl =
-      'http://127.0.0.1:5000'; // Ganti dengan IP server Flask
+  // Ganti dengan IP server Flask
 
   static Future<Map<String, dynamic>> predictInsomnia(
       PredictionRequest request) async {
-    final url = Uri.parse('$baseUrl/predict');
+     var uri = Uri.parse('$url/predict');
     final response = await http.post(
-      url,
+      uri,
       headers: {'Content-Type': 'application/json'},
       body: json.encode(request.toJson()),
     );

@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
+import 'package:insomnia_app/utils/base-url.dart';
 import 'dart:async';
 import '../widgets/custom_button.dart';
 import '../screens/reset_password.dart';
@@ -71,7 +73,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text('OTP baru telah dikirim ke ${widget.email}'),
+        content: Text('otp baru telah dikirim ke ${widget.email}'.tr),
         backgroundColor: Color(0xFF392F5A),
       ),
     );
@@ -81,7 +83,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     setState(() => _isLoading = true);
     try {
       var responses = await myhttp.post(
-        Uri.parse('http://127.0.0.1:5000/verifikasi-email'),
+        Uri.parse('$url/verifikasi-email'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -96,7 +98,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         if (data['status'] == 'success') {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Verifikasi berhasil!'),
+              content: Text('verifikasi berhasil!'.tr),
               backgroundColor: Colors.green.shade700,
             ),
           );
@@ -107,7 +109,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         } else {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Kode verifikasi salah atau kadaluarsa.'),
+              content: Text('kode verifikasi salah atau kadaluarsa.'.tr),
               backgroundColor: Colors.red.shade700,
             ),
           );
@@ -115,7 +117,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Gagal menghubungi server.'),
+            content: Text('gagal menghubungi server.'.tr),
             backgroundColor: Colors.red.shade700,
           ),
         );
@@ -123,7 +125,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text('Terjadi kesalahan: $e'),
+          content: Text('terjadi kesalahan: $e'.tr),
           backgroundColor: Colors.red.shade700,
         ),
       );
@@ -221,7 +223,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 SizedBox(height: 40),
                 Center(
                   child: Text(
-                    'Verifikasi Email',
+                    'verifikasi email'.tr,
                     style: TextStyle(
                       fontSize: 30,
                       fontWeight: FontWeight.bold,
@@ -233,7 +235,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 SizedBox(height: 12),
                 Center(
                   child: Text(
-                    'Kode verifikasi telah dikirim ke',
+                    'kode verifikasi telah dikirim ke'.tr,
                     style: TextStyle(
                       fontSize: 16,
                       color: Colors.grey[400],
@@ -262,7 +264,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Kirim ulang kode dalam ',
+                      'kirim ulang kode dalam'.tr,
                       style: TextStyle(
                         fontSize: 14,
                         color: Colors.grey[400],
@@ -283,7 +285,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   child: TextButton(
                     onPressed: _remainingSeconds > 0 ? null : resendOTP,
                     child: Text(
-                      'Kirim Ulang Kode',
+                      'kirim ulang Kode'.tr,
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w600,
@@ -298,7 +300,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 _isLoading
                     ? Center(child: CircularProgressIndicator())
                     : CustomButton(
-                        text: 'Verifikasi',
+                        text: 'verifikasi'.tr,
                         onPressed: () {
                           String kode =_otpControllers.map((c) => c.text).join();
                           if (kode.length == 4) {
@@ -307,7 +309,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
                                 content:
-                                    Text('Mohon isi kode OTP dengan lengkap'),
+                                    Text('mohon isi kode OTP dengan lengkap'.tr),
                                 backgroundColor: Colors.red.shade700,
                               ),
                             );

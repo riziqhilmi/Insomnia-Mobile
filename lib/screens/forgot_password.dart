@@ -1,6 +1,8 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:insomnia_app/utils/base-url.dart';
 import '../widgets/custom_button.dart';
 import 'otp_verification_screen.dart';
 import 'dart:async';
@@ -70,14 +72,14 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
     if (email.isEmpty) {
       if (showError) {
         setState(() {
-          _emailError = 'Email tidak boleh kosong';
+          _emailError = 'email tidak boleh kosong'.tr;
         });
       }
       return false;
     } else if (!email.contains('@')) {
       if (showError) {
         setState(() {
-          _emailError = 'Email harus mengandung tanda "@"';
+          _emailError = 'email harus mengandung tanda @'.tr;
         });
       }
       return false;
@@ -149,8 +151,8 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                   const SizedBox(height: 30),
                   buildMoonWidget(size),
                   const SizedBox(height: 40),
-                  const Text(
-                    'Lupa Password',
+                   Text(
+                    'lupa password'.tr,
                     style: TextStyle(
                       fontSize: 32,
                       color: Colors.white,
@@ -158,9 +160,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
                       letterSpacing: 0.5,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                   SizedBox(height: 16),
                   Text(
-                    'Masukkan email Anda untuk reset password',
+                    'masukkan email anda untuk reset password'.tr,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.7),
@@ -200,7 +202,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
 
                   const SizedBox(height: 40),
                   CustomButton(
-                    text: 'Kirim',
+                    text: 'kirim'.tr,
                     onPressed: () {
                       if (_validateEmail()) {
                         _emailverification(context);
@@ -250,7 +252,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen>
             filled: true,
             fillColor: Colors.white12,
             prefixIcon: const Icon(Icons.email_outlined, color: Colors.white),
-            hintText: 'Email',
+            hintText: 'email'.tr,
             hintStyle: const TextStyle(color: Colors.grey),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
@@ -344,8 +346,8 @@ Future<void>_emailverification(BuildContext context) async {
     final email = _emailController.text.trim();
     if (email.isEmpty || !email.contains('@')) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Masukkan email yang valid'),
+         SnackBar(
+          content: Text('masukkan email yang valid'.tr),
           backgroundColor: Color(0xFFFF8A8A),
         ),
       );
@@ -354,7 +356,7 @@ Future<void>_emailverification(BuildContext context) async {
 
     try {
       final response = await myhttp.post(
-        Uri.parse('http://127.0.0.1:5000/verifikasi-email'),
+        Uri.parse('$url/verifikasi-email'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -367,15 +369,15 @@ Future<void>_emailverification(BuildContext context) async {
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Permintaan reset password berhasil dikirim!'),
+           SnackBar(
+            content: Text('permintaan reset password berhasil dikirim!'.tr),
             backgroundColor: Color(0xFF4B6DE9),
           ),
         );
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Terjadi kesalahan, silakan coba lagi.'),
+           SnackBar(
+            content: Text('terjadi kesalahan, silakan coba lagi.'.tr),
             backgroundColor: Color(0xFFFF8A8A),
           ),
         );
@@ -383,8 +385,8 @@ Future<void>_emailverification(BuildContext context) async {
     } catch (e) {
       print(e);
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Terjadi kesalahan jaringan, silakan coba lagi. 000'),
+         SnackBar(
+          content: Text('terjadi kesalahan jaringan, silakan coba lagi. 000'.tr),
           backgroundColor: Color(0xFFFF8A8A),
         ),
       );

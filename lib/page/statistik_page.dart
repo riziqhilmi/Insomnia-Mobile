@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:fl_chart/fl_chart.dart';
+import 'package:insomnia_app/utils/base-url.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -43,7 +44,7 @@ class _StatistikPageState extends State<StatistikPage> {
 
   Future<void> fetchPredictions(int id) async {
     final response =
-        await http.get(Uri.parse('http://127.0.0.1:5000/user_predictions/$id'));
+        await http.get(Uri.parse('$url/user_predictions/$id'));
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);

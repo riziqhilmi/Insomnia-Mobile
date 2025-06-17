@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:insomnia_app/utils/base-url.dart';
 import '../widgets/custom_text_field.dart';
 import '../widgets/custom_button.dart';
 import 'register_screen.dart';
@@ -152,13 +153,14 @@ Future<void> handleLogin(BuildContext context, TextEditingController emailC,
     }
 
     var responses = await myhttp.post(
-      Uri.parse('http://localhost:5000/login'), 
+      Uri.parse('$url/login'), 
       headers: {'Content-Type': 'application/json'},
       body: json.encode({
         'email': emailC.text,
         'password': passwordC.text,
       }),
     );
+    print(responses.body); // Untuk debug
 
     if (!context.mounted) return;
 

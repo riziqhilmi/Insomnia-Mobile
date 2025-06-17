@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
+import 'package:insomnia_app/utils/base-url.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -35,7 +37,7 @@ class _EducationPageState extends State<EducationPage> {
   }
 
   Future<List<Map<String, dynamic>>> fetchEducation() async {
-    final response = await http.get(Uri.parse('http://127.0.0.1:5000/education'));
+    final response = await http.get(Uri.parse('$url/education'));
 
     if (response.statusCode == 200) {
       final jsonData = json.decode(response.body);

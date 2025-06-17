@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:animated_background/animated_background.dart';
 import 'package:insomnia_app/screens/login_screen.dart';
+import 'package:insomnia_app/utils/base-url.dart';
 import '../widgets/custom_button.dart';
 
 class RegisterScreen extends StatefulWidget {
@@ -45,7 +46,7 @@ class _RegisterScreenState extends State<RegisterScreen>
   Future<void> _handleRegister() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final url = Uri.parse("http://127.0.0.1:5000/register");
+    final uri = Uri.parse("$url/register");
 
     final Map<String, dynamic> body = {
       "name": namaDepanC.text,
@@ -60,7 +61,7 @@ class _RegisterScreenState extends State<RegisterScreen>
 
     try {
       final response = await http.post(
-        url,
+        uri,
         headers: {"Content-Type": "application/json"},
         body: jsonEncode(body),
       );
@@ -223,7 +224,7 @@ class _RegisterScreenState extends State<RegisterScreen>
                                 val == null ? 'pilih jenis kelamin'.tr: null,
                             dropdownItems:  [
                               DropdownMenuItem(
-                                  value: "laki-laki".tr, child: Text("laki laki".tr)),
+                                  value: "laki-laki".tr, child: Text("laki-laki".tr)),
                               DropdownMenuItem(
                                   value: "perempuan".tr, child: Text("perempuan".tr)),
                             ]),
